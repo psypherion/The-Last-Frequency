@@ -1,7 +1,13 @@
 <!doctype html>
 <html lang="en">
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="theme-color" content="#080A0B">
+<meta name="screen-orientation" content="landscape">
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22The%20Last%20Frequency%22%2C%22short_name%22%3A%22Last%20Frequency%22%2C%22display%22%3A%22fullscreen%22%2C%22orientation%22%3A%22landscape%22%2C%22background_color%22%3A%22%23080A0B%22%2C%22theme_color%22%3A%22%23080A0B%22%7D">
 <title>The Last Frequency</title>
 <style>
 @font-face{font-family:"VT323";src:url(data:font/woff2;base64,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) format("woff2");font-weight:400;font-style:normal;font-display:swap}
@@ -110,21 +116,21 @@ input[type=range]{width:100%;accent-color:#A17A43;margin-top:10px}
   padding-block:max(24px, env(safe-area-inset-top,0px)) max(24px, env(safe-area-inset-bottom,0px));
   padding-left:max(16px, env(safe-area-inset-left,0px));padding-right:max(16px, env(safe-area-inset-right,0px))}
 #card{background:radial-gradient(ellipse at center,rgba(8,10,11,.94),rgba(2,3,3,.985) 75%);pointer-events:none;transition:opacity 1.2s}
-#card .name::after{content:"";display:block;height:1px;margin:14px auto 0;width:min(320px,60vw);background:linear-gradient(90deg,rgba(161,122,67,0),rgba(161,122,67,.8),rgba(161,122,67,0));animation:cardLine 3.2s ease-in-out}
+#card .name::after{content:"";display:block;height:1px;margin:14px auto 0;width:min(320px,calc(var(--vw,1vw)*60));background:linear-gradient(90deg,rgba(161,122,67,0),rgba(161,122,67,.8),rgba(161,122,67,0));animation:cardLine 3.2s ease-in-out}
 @keyframes cardLine{from{transform:scaleX(0);opacity:0}to{transform:scaleX(1);opacity:1}}
 #card .act{font-family:var(--mono);font-size:22px;letter-spacing:.5em;color:var(--amber)}
-#card .name{font-family:var(--display);font-size:clamp(34px,7vw,74px);color:#b7bdb9;letter-spacing:.06em;text-wrap:balance;margin-top:6px}
+#card .name{font-family:var(--display);font-size:clamp(34px,calc(var(--vw,1vw)*7),74px);color:#b7bdb9;letter-spacing:.06em;text-wrap:balance;margin-top:6px}
 #cine{background:transparent;cursor:pointer}
-#cine .cl{position:relative;max-width:62ch;font-family:var(--mono);font-size:clamp(22px,3.2vw,30px);color:#b9c1bc;line-height:1.2;transition:opacity .9s;text-wrap:balance}
+#cine .cl{position:relative;max-width:62ch;font-family:var(--mono);font-size:clamp(22px,calc(var(--vw,1vw)*3.2),30px);color:#b9c1bc;line-height:1.2;transition:opacity .9s;text-wrap:balance}
 #cine .cl .spk{display:block;font-size:16px;letter-spacing:.24em;color:#b56a70;margin-bottom:6px}
-#cine .cl.big{font-family:var(--display);font-size:clamp(30px,6vw,64px);color:#c4c9c5;letter-spacing:.05em}
+#cine .cl.big{font-family:var(--display);font-size:clamp(30px,calc(var(--vw,1vw)*6),64px);color:#c4c9c5;letter-spacing:.05em}
 #cine .cl.end{font-family:var(--mono);letter-spacing:.4em;color:var(--amber);font-size:20px}
 #cine .skip{position:absolute;bottom:calc(20px + env(safe-area-inset-bottom,0px));right:calc(20px + env(safe-area-inset-right,0px));font-size:18px;opacity:.6}
 
 #title{background:radial-gradient(ellipse at 50% 45%,rgba(8,10,11,.35),rgba(8,10,11,0) 70%);gap:0;overflow:auto;justify-content:center}
 .tbox{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;max-width:760px}
 .tbox .coords{font-size:18px;letter-spacing:.32em;color:var(--crt)}
-.tbox h1{font-family:var(--display);font-weight:400;font-size:clamp(42px,9vw,108px);line-height:.92;letter-spacing:.04em;color:#b9bfbb;margin:0;text-wrap:balance;
+.tbox h1{font-family:var(--display);font-weight:400;font-size:clamp(42px,calc(var(--vw,1vw)*9),108px);line-height:.92;letter-spacing:.04em;color:#b9bfbb;margin:0;text-wrap:balance;
   text-shadow:1px 0 rgba(101,29,36,.55),-1px 0 rgba(70,87,97,.45),0 0 30px rgba(101,29,36,.35)}
 .tbox .tag{font-size:22px;color:#8f9792;max-width:44ch;line-height:1.15}
 .tbox .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:10px}
@@ -132,27 +138,17 @@ input[type=range]{width:100%;accent-color:#A17A43;margin-top:10px}
 .tbox .help b{color:var(--amber);font-weight:400}
 .tbox .found{font-size:16px;letter-spacing:.2em;color:#6f7773}
 #pause{background:rgba(3,4,4,.74);backdrop-filter:blur(2px) saturate(.6);-webkit-backdrop-filter:blur(2px) saturate(.6);gap:12px}
-#pause h2,#end h2{font-family:var(--display);font-weight:400;font-size:clamp(30px,5vw,52px);color:#b9bfbb;margin:0;letter-spacing:.05em}
+#pause h2,#end h2{font-family:var(--display);font-weight:400;font-size:clamp(30px,calc(var(--vw,1vw)*5),52px);color:#b9bfbb;margin:0;letter-spacing:.05em}
 #end{background:rgba(3,4,4,.55);gap:14px}
 #end .ename{font-size:22px;letter-spacing:.35em;color:var(--amber)}
 #end p{max-width:52ch;color:#8f9792;font-size:20px;line-height:1.2}
 
-#touch{position:absolute;inset:0;pointer-events:none}
-#touch .zone{position:absolute;top:0;bottom:0;pointer-events:auto}
-#touch .lz{left:0;width:45%}
-#touch .rz{right:0;width:55%}
-#touch .tb{position:absolute;pointer-events:auto;font-size:18px;padding:10px 14px;background:rgba(8,10,11,.7)}
-#tuse{right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(90px + env(safe-area-inset-bottom,0px))}
-#tnote{right:calc(18px + env(safe-area-inset-right,0px));top:calc(14px + env(safe-area-inset-top,0px))}
-#tmap{right:calc(98px + env(safe-area-inset-right,0px));top:calc(14px + env(safe-area-inset-top,0px))}
-#stick{position:absolute;width:90px;height:90px;border:1px solid rgba(169,194,166,.3);border-radius:50%;pointer-events:none}
-#stick i{position:absolute;left:35px;top:35px;width:20px;height:20px;border-radius:50%;background:rgba(169,194,166,.4)}
 
 #belt{left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));display:flex;gap:14px;font-size:15px;letter-spacing:.14em;opacity:.55}
 #belt span.on{color:var(--amber);opacity:1}
 #recv{right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(64px + env(safe-area-inset-bottom,0px));width:240px;height:110px;border:1px solid #2a312f;border-radius:6px}
 #stage:not([data-mode=play]) #belt,#stage:not([data-mode=play]) #recv{display:none}
-#dev{position:absolute;right:calc(18px + env(safe-area-inset-right,0px));top:calc(60px + env(safe-area-inset-top,0px));width:min(300px,42vw);background:#d9d3c2;padding:8px 8px 24px;transform:rotate(2deg);box-shadow:0 8px 30px rgba(0,0,0,.6);pointer-events:none}
+#dev{position:absolute;right:calc(18px + env(safe-area-inset-right,0px));top:calc(60px + env(safe-area-inset-top,0px));width:min(300px,calc(var(--vw,1vw)*42));background:#d9d3c2;padding:8px 8px 24px;transform:rotate(2deg);box-shadow:0 8px 30px rgba(0,0,0,.6);pointer-events:none}
 #dev img{display:block;width:100%;filter:brightness(0) sepia(1)}
 #dev.go img{animation:develop 4.6s ease-in forwards}
 #dev.done{opacity:0;transition:opacity .9s}
@@ -172,7 +168,7 @@ table.ctl td{padding:3px 4px;border-top:1px solid #1b2120}
 .crt input[type=range]{margin-top:2px}
 .crt textarea,.ledger textarea{width:100%;background:#0b0f0d;color:var(--phos);border:1px solid #2a312f;font-family:var(--mono);font-size:18px;padding:6px}
 .ledger textarea{background:rgba(255,255,255,.35);color:var(--ink);border-color:#8a8270;font-family:var(--type);font-size:16px}
-.ledger{background:var(--paper);color:var(--ink);font-family:var(--type);width:min(900px,100%);padding:20px 24px;max-height:calc(100vh - 32px);overflow:auto}
+.ledger{background:var(--paper);color:var(--ink);font-family:var(--type);width:min(900px,100%);padding:20px 24px;max-height:calc(calc(var(--vh,1vh)*100) - 32px);overflow:auto}
 .ledger .lhead{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px;border-bottom:2px solid #6c6555;padding-bottom:8px}
 .ledger .lt{font-family:var(--display);font-size:30px;letter-spacing:.06em}
 .ledger .ls{font-size:12px;letter-spacing:.2em;opacity:.7}
@@ -205,7 +201,7 @@ table.ctl td{padding:3px 4px;border-top:1px solid #1b2120}
 .ropts button[aria-pressed="true"]{border-color:var(--amber);color:#e2c79a}
 .report{font-size:18px;line-height:1.3;color:#b9c1bc}
 .report .ls{font-size:14px;letter-spacing:.25em;color:var(--crt)}
-.report h2{font-size:clamp(28px,5vw,46px);margin:4px 0 0}
+.report h2{font-size:clamp(28px,calc(var(--vw,1vw)*5),46px);margin:4px 0 0}
 .report .sub{color:var(--amber);letter-spacing:.2em}
 .report h3{font-size:16px;letter-spacing:.25em;color:var(--amber);margin:16px 0 4px;font-weight:400;text-transform:uppercase}
 .report .rgrid{display:flex;flex-wrap:wrap;gap:16px;margin-top:10px}.report .rgrid>div{flex:1 1 300px}
@@ -227,8 +223,53 @@ table.ctl td{padding:3px 4px;border-top:1px solid #1b2120}
 #trecv{right:calc(178px + env(safe-area-inset-right,0px));top:calc(14px + env(safe-area-inset-top,0px))}
 #tcam{right:calc(18px + env(safe-area-inset-right,0px));top:calc(64px + env(safe-area-inset-top,0px))}
 #tflare{right:calc(108px + env(safe-area-inset-right,0px));top:calc(64px + env(safe-area-inset-top,0px))}
-@media (max-width:560px){#belt{display:none}#recv{width:180px;height:82px;bottom:calc(150px + env(safe-area-inset-bottom,0px))}}
-@media (max-width:560px){#dialog .txt{font-size:21px;min-height:48px}#keys{display:none}#wrist{width:120px;height:45px}}
+
+html.rot #stage{right:auto;bottom:auto;transform-origin:0 0}
+#touch{position:absolute;inset:0;pointer-events:none}
+#touch .zone{position:absolute;top:0;bottom:0;pointer-events:auto;touch-action:none}
+#tmove{left:0;width:42%}#tlook{right:0;width:58%}
+#touch .tb{position:absolute;pointer-events:auto;touch-action:none;padding:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:radial-gradient(circle at 50% 38%,rgba(34,42,39,.8),rgba(7,9,9,.82));border:1.5px solid rgba(169,194,166,.42);color:var(--phos);letter-spacing:.12em;-webkit-tap-highlight-color:transparent}
+#touch .rd{border-radius:50%}#touch .sq{border-radius:12px}
+#touch .tb svg{width:44%;height:44%;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+#touch .sq svg{width:52%;height:52%}
+#touch .tb b{font-weight:400;font-size:12px;line-height:1}
+#touch .tb i{position:absolute;right:2%;top:2%;font-style:normal;font-size:12px;line-height:1;background:#0b0f0d;border:1px solid #2a312f;border-radius:8px;padding:2px 5px;color:#c9a46c}
+#touch .tb.down{transform:scale(.9);background:rgba(161,122,67,.32)}
+#touch .tb.on{border-color:var(--amber);color:#e2c79a}
+#tuse b{font-size:14px!important}
+#tuse.hot{border-color:var(--amber);color:#e2c79a;animation:usepulse 1.5s ease-in-out infinite}
+@keyframes usepulse{0%,100%{box-shadow:0 0 10px rgba(161,122,67,.35)}50%{box-shadow:0 0 26px rgba(161,122,67,.75)}}
+#stickbase{position:absolute;border-radius:50%;border:1.5px solid rgba(169,194,166,.32);background:radial-gradient(circle,rgba(169,194,166,.07),rgba(0,0,0,.28));pointer-events:none}
+#stickbase.active{border-color:rgba(169,194,166,.6)}
+#stickknob{position:absolute;left:29%;top:29%;width:42%;height:42%;border-radius:50%;background:radial-gradient(circle at 40% 35%,rgba(200,220,195,.55),rgba(120,140,125,.35));border:1px solid rgba(169,194,166,.7)}
+#stickbase .lk{position:absolute;left:50%;top:-30%;transform:translateX(-50%);font-size:13px;letter-spacing:.2em;color:rgba(169,194,166,.45);font-weight:400;white-space:nowrap;display:none}#stickbase.active .lk,#stickbase.locked .lk{display:block}
+#stickbase.lockarm .lk,#stickbase.locked .lk{color:var(--amber)}#stickbase.locked{border-color:var(--amber);box-shadow:0 0 16px rgba(161,122,67,.4)}
+#stage:not([data-mode=play]):not([data-mode=abyss]) #touch{display:none}
+#stage[data-mode=abyss] #touch .tb:not(#tpause),#stage[data-ui=dlg] #touch .tb:not(#tpause),#stage[data-ui=panel] #touch .tb{display:none}
+html.touchui #wrist{bottom:auto;top:calc(38px + env(safe-area-inset-top,0px));width:120px;height:45px}
+html.touchui #prompt{bottom:auto;top:60%;font-size:16px}
+html.touchui #recv{right:auto;left:50%;transform:translateX(-50%);top:8px;bottom:auto;width:200px;height:92px}
+html.touchui #caption{font-size:14px}
+html.touchui #cross{opacity:.8}
+#hudedit{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:40;background:rgba(5,7,6,.92);border:1px solid #2a312f;border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;align-items:center;max-width:92%}
+#hudedit .gbtns{justify-content:center}#hudedit p{margin:0;font-size:16px;color:#8f9792;text-align:center}
+.hudedit #touch{display:block!important}.hudedit #touch .tb{display:flex!important;outline:1px dashed rgba(201,164,108,.55);outline-offset:3px}.hudedit #stickbase{pointer-events:auto;outline:1px dashed rgba(201,164,108,.55)}
+.hudedit #title,.hudedit #end{visibility:hidden}
+#touch .sel{outline:2px solid var(--amber)!important}
+.ctlh{font-family:var(--mono);font-weight:400;font-size:15px;letter-spacing:.3em;color:var(--amber);margin:14px 0 4px;text-transform:uppercase}
+html.short .crt{padding:12px 16px}
+html.short button{font-size:17px;padding:4px 10px}
+html.short #touch .tb,html.short #touch .tb b{padding:0}
+html.short #dialog .txt{font-size:19px;min-height:0}
+html.short .paper{padding:16px 18px;font-size:14px}
+html.short .crt canvas.inset{max-height:calc(var(--vh,1vh)*42);width:auto;margin:0 auto}
+html.short .tbox{gap:6px}html.short .tbox h1{font-size:calc(var(--vh,1vh)*14)}html.short .tbox .tag{font-size:17px}html.short .tbox .help{font-size:14px}
+html.short #card .name{font-size:calc(var(--vh,1vh)*11)}
+html.short #pause{justify-content:flex-start;overflow:auto;padding-top:14px}html.short #pause h2{font-size:30px}
+html.short .ledger{padding:12px 14px}html.short .ledger .lt{font-size:22px}
+html.short .rpanel{padding:12px 14px}
+html.narrow #belt{display:none}html.narrow #recv{width:180px;height:82px;bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+html.narrow #dialog .txt{font-size:21px;min-height:48px}html.narrow #keys{display:none}html.narrow #wrist{width:120px;height:45px}
 </style>
 
 <div id="stage">
@@ -245,15 +286,19 @@ table.ctl td{padding:3px 4px;border-top:1px solid #1b2120}
   <div id="dev" hidden></div>
   <div id="toast" role="status" aria-live="polite"></div>
   <div id="touch" hidden>
-    <div class="zone lz" id="tlz"></div><div class="zone rz" id="trz"></div>
-    <div id="stick" hidden><i></i></div>
-    <button class="tb" id="tuse">Use</button>
-    <button class="tb" id="tnote">Notes</button>
-    <button class="tb" id="tmap">Plan</button>
-    <button class="tb" id="trecv">Recv</button>
-    <button class="tb" id="tcam">Photo</button>
-    <button class="tb" id="tflare">Flare</button>
+    <div class="zone" id="tmove"></div><div class="zone" id="tlook"></div>
+    <div id="stickbase"><i id="stickknob"></i><b class="lk">AUTO-WALK</b></div>
+    <button class="tb rd" id="tuse" aria-label="Use"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 13V6a1.5 1.5 0 0 1 3 0v5M11 10V4.5a1.5 1.5 0 0 1 3 0V10M14 10V5.5a1.5 1.5 0 0 1 3 0V12M17 9.5a1.5 1.5 0 0 1 3 0V14c0 4-2.5 7-6.5 7S8 19 6 16l-2.2-3.3a1.4 1.4 0 0 1 2.2-1.7L8 13"/></svg><b>USE</b></button>
+    <button class="tb rd" id="tcam" aria-label="Camera"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l1.6-3h4.8L16 7"/><circle cx="12" cy="13.5" r="3.6"/></svg><i>12</i></button>
+    <button class="tb rd" id="tflare" aria-label="Throw flare"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-9M9.5 12h5"/><path d="M12 12c-2.5-2-2.5-5 0-9 2.5 4 2.5 7 0 9z"/><path d="M6 6l1.5 1.5M18 6l-1.5 1.5M4 11h2M18 11h2"/></svg><i>0</i></button>
+    <button class="tb rd" id="ttorch" aria-label="Flashlight"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21h6v-8l3-5H6l3 5z"/><path d="M6 8V5h12v3"/><path d="M12 15v2"/></svg></button>
+    <button class="tb rd" id="trecv" aria-label="Receiver"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-9"/><circle cx="12" cy="10" r="1.6"/><path d="M8.5 6.5a5 5 0 0 0 0 7M15.5 6.5a5 5 0 0 1 0 7M5.5 3.5a9 9 0 0 0 0 13M18.5 3.5a9 9 0 0 1 0 13"/></svg></button>
+    <button class="tb sq" id="tnote" aria-label="Field Ledger"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5c3-1.5 5.5-1.5 8 0v15c-2.5-1.5-5-1.5-8 0zM20 5c-3-1.5-5.5-1.5-8 0v15c2.5-1.5 5-1.5 8 0z"/></svg></button>
+    <button class="tb sq" id="tmap" aria-label="Station plan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg></button>
+    <button class="tb sq" id="tfull" aria-label="Full screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+    <button class="tb sq" id="tpause" aria-label="Pause"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg></button>
   </div>
+  <div id="hudedit" hidden><p>Drag any control to move it. Tap one to select it, then resize.</p><div class="gbtns"><button id="hudSmall">Smaller</button><button id="hudBig">Larger</button><button id="hudMirror">Mirror (left-handed)</button><button id="hudReset">Reset</button><button id="hudDone" class="primary">Done</button></div></div>
   <div id="dialog" hidden><div class="who"></div><div class="txt"></div><div class="more">E ▸</div><div class="choices"></div></div>
   <div id="panel" hidden><div class="sheet" id="sheet"></div></div>
   <div id="card" hidden><div class="act"></div><div class="name"></div></div>
@@ -1191,7 +1236,7 @@ function takePhoto(){inv();if(mode!=='play'||D||!panel.hidden)return;if(S.film<=
   else if(ST.on&&ST.d<14){sp.push({x:ST.x,y:ST.y,tex:SP.followerF[0],hgt:1.08,kind:1,rim:1.4,jit:0,diss:.05});anom=true}
   else if(!ST.on&&S.act>=3&&S.act<=5&&LK()>=2&&!has('remPre')){let d=0.5;const dx=Math.cos(P.a),dy=Math.sin(P.a);while(d<11&&!MAP[I((P.x+dx*d)|0,(P.y+dy*d)|0)])d+=.1;if(d>4.5){sp.push({x:P.x+dx*(d*.9),y:P.y+dy*(d*.9),tex:SP.followerF[0],hgt:1.08,kind:1,rim:1.4,diss:.05});anom=true;setFlag('remPre');anomaly('remPre')}}
   else if(LK()>=1&&hash(Math.floor(TT*7)+S.film*13)<.18*LK()){let d=0.5;const dx=Math.cos(P.a),dy=Math.sin(P.a);while(d<9&&!MAP[I((P.x+dx*d)|0,(P.y+dy*d)|0)])d+=.1;if(d>3){sp.push({x:P.x+dx*(d*.85),y:P.y+dy*(d*.85),tex:SP.shade,hgt:.92,kind:1,rim:1.6,diss:.1});anom=true}}
-  computeLights();renderScene(PHT.T,{x:P.x,y:P.y,a:P.a,hor:128},{lk:LK(),flash:5,sprites:sp,shadows:true,noPut:true});
+  computeLights();renderScene(PHT.T,{x:P.x,y:P.y,a:P.a,hor:128+PITCH*256},{lk:LK(),flash:5,sprites:sp,shadows:true,noPut:true});
   const u=PHT.T.u;for(let i=0;i<u.length;i++){const p=u[i],x=i%384,y=(i/384)|0,dx=(x-192)/192,dy=(y-128)/128;let l=((p&255)*.3+((p>>8)&255)*.59+((p>>16)&255)*.11)*1.25*(1-.45*(dx*dx+dy*dy))+(Math.random()-.5)*26;l=clamp(l,0,255);
     u[i]=(0xff000000|(((l*.78)|0)<<16)|(((l*.9)|0)<<8)|(l|0))>>>0}
   const pc=mkC(420,330),g=pc.getContext('2d');g.fillStyle='#d9d3c2';g.fillRect(0,0,420,330);PHT.T.ctx.putImageData(PHT.T.img,0,0);g.drawImage(PHT.cv,18,18,384,256);
@@ -1904,6 +1949,7 @@ const STLINES={3:[['N','Something is standing at the far end of the tunnel. Tall
   4:[['N','It is back. It is closer than where I left it.'],['N','Its head is tilted, the way you tilt your head to listen.']],
   5:[['N','It is in the corridor with me. I think it has been in every corridor.']]};
 function stalkerTick(dt){
+  if(coarse&&ST.on&&ST.d<5&&!ST.seen){stalkerTick.hb=(stalkerTick.hb||0)-dt;if(stalkerTick.hb<=0){stalkerTick.hb=.4+ST.d*.25;buzz(12)}}
   if(ST.grace>0){ST.grace-=dt;return}
   if(!stalkerWanted()){ST.on=false;return}
   if(D||!panel.hidden||!$('#pause').hidden)return;
@@ -1929,6 +1975,7 @@ const LOSTL=["I am in my bunk. My boots are wet with meltwater. I do not remembe
   "My bunk again. There are scratches on the inside of the hatch, at the height of my own hands.",
   "The bunk. Someone has written in my field notes, in my handwriting: IT IS FASTER WHEN YOU DON'T LOOK."];
 function lostTime(){
+  buzz([60,40,200]);cancelLock();PITCH=0;
   obs('lost:'+((S.lost||0)+1),{risk:.8},{});ST.on=false;ST.grace=28;S.lost=(S.lost||0)+1;FX.glitch=1;FX.rollV=1.6;FX.ca=1;const mins=70+(Math.random()*130|0);S.clock+=mins;mode='cut';stopVoice();
   noiseBurst({f:60,v:.8,a:.01,d:2.2,brown:true,bus:AU.master});
   P.x=7.5;P.y=14.2;P.a=-Math.PI/2;
@@ -2453,7 +2500,7 @@ const AFIG=[[-3,-8,'arthur','A',"She was never in the cold, Doctor. I was."],[3,
 function abyssTick(dt){
   if(D||!panel.hidden||!$('#pause').hidden)return;
   let turn=0,mv=0;if(K('turnL'))turn-=1;if(K('turnR'))turn+=1;if(K('forward'))mv+=1;if(K('back'))mv-=1;
-  mv+=touchMove.f;AP.a+=turn*1.6*dt+mouseDX*.0025*GX.sens*(GX.invertTurn?-1:1)+touchTurn*.006;mouseDX=0;touchTurn=0;
+  mv+=touchMove.f;AP.a+=turn*1.6*dt+mouseDX*.0025*GX.sens*(GX.invertTurn?-1:1)+touchTurn*.006;mouseDX=0;touchTurn=0;if(K('lookUp'))addPitch(.55*dt);if(K('lookDown'))addPitch(-.55*dt);addPitch(-mouseDY*.0011*GX.sens*(GX.invertY?-1:1));mouseDY=0;
   const sp=1.15*dt*mv;AP.x+=Math.cos(AP.a)*sp;AP.y+=Math.sin(AP.a)*sp;AP.x=clamp(AP.x,-14,14);AP.y=clamp(AP.y,-40,.9);
   if(mv)abyss.idle=0;else abyss.idle+=dt;
   const dM=Math.hypot(AP.x,AP.y+34);
@@ -2479,7 +2526,7 @@ function abyssTick(dt){
     say([{choice:[['Go back up',()=>{informed('abyss',['mara','body','team2','terms','proposal']);decision('Went back up in the lift',5,{skepticism:1,persistence:.5},{JP:.5});endingA()}],['Stay',()=>{}]],text:'The lift is behind me, doors open, light still on.'}],()=>{setTimeout(()=>abyss.askedA=false,4000)})}
 }
 function abyssDraw(g,w,h){
-  const focal=(w/2)/.62,hor=h*.52+Math.sin(TT*.11)*4+Math.sin(TT*.037)*3;
+  const focal=(w/2)/.62,hor=h*.52+PITCH*h+Math.sin(TT*.11)*4+Math.sin(TT*.037)*3;
   g.fillStyle='#040506';g.fillRect(0,0,w,h);g.fillStyle='#030304';g.fillRect(0,hor,w,h-hor);
   const dx=Math.cos(AP.a),dy=Math.sin(AP.a),rx=-dy,ry=dx;
   const pr=(x,y)=>{const vx=x-AP.x,vy=y-AP.y;const d=vx*dx+vy*dy,l=vx*rx+vy*ry;return d>.1?{x:w/2+l/d*focal,d}:null};
@@ -2565,7 +2612,7 @@ if(window.claude&&window.claude.hot&&window.claude.hot.snapshot)window.claude.ho
 
 /* ================= CONTROLS: rebindable actions ================= */
 const ACTIONS=[['forward','Move forward',['KeyW','ArrowUp']],['back','Move back',['KeyS','ArrowDown']],['left','Step left',['KeyA']],['right','Step right',['KeyD']],
-  ['turnL','Turn left',['ArrowLeft','KeyQ']],['turnR','Turn right',['ArrowRight']],['use','Use / advance',['KeyE','Space']],['torch','Flashlight',['KeyF']],
+  ['turnL','Turn left',['ArrowLeft','KeyQ']],['turnR','Turn right',['ArrowRight']],['lookUp','Look up',['PageUp']],['lookDown','Look down',['PageDown']],['use','Use / advance',['KeyE','Space']],['torch','Flashlight',['KeyF']],
   ['receiver','Handheld receiver',['KeyR']],['camera','Camera',['KeyC']],['flare','Throw flare',['KeyG']],['ledger','Field Ledger',['KeyJ']],['plan','Station plan',['KeyM']],['fine','Fine tuning (hold)',['ShiftLeft','ShiftRight']]];
 let BIND={},REBIND=null;
 function resetBinds(){BIND={};for(const a of ACTIONS)BIND[a[0]]=a[2].slice()}
@@ -2576,17 +2623,18 @@ const isA=(code,a)=>BIND[a].includes(code);
 function keyName(c){if(!c)return '—';const m={Space:'Space',Enter:'Enter',ArrowUp:'↑',ArrowDown:'↓',ArrowLeft:'←',ArrowRight:'→',ShiftLeft:'L-Shift',ShiftRight:'R-Shift',ControlLeft:'L-Ctrl',ControlRight:'R-Ctrl',AltLeft:'L-Alt',AltRight:'R-Alt',Tab:'Tab',Backspace:'Backspace',CapsLock:'Caps',Backquote:'`',Minus:'-',Equal:'=',BracketLeft:'[',BracketRight:']',Semicolon:';',Quote:"'",Comma:',',Period:'.',Slash:'/',Backslash:'\\'};
   if(m[c])return m[c];if(c.startsWith('Key'))return c.slice(3);if(c.startsWith('Digit'))return c.slice(5);if(c.startsWith('Numpad'))return 'Num '+c.slice(6);return c}
 const KN=a=>BIND[a].map(keyName).join(' / ');
-function refreshKeyHints(){CLOSE=`<div class="closebar"><button data-close>Close · ${keyName(BIND.use[0])}</button></div>`;const dm=document.querySelector('#dialog .more');if(dm)dm.textContent=keyName(BIND.use[0])+' ▸';
-  const hk=$('#helpk');if(hk)hk.innerHTML=`<b>${keyName(BIND.forward[0])}${keyName(BIND.left[0])}${keyName(BIND.back[0])}${keyName(BIND.right[0])}</b> move · <b>mouse</b> or <b>${KN('turnL')} ${KN('turnR')}</b> look · <b>${keyName(BIND.use[0])}</b> use and advance · <b>${keyName(BIND.torch[0])}</b> torch · <b>${keyName(BIND.receiver[0])}</b> receiver · <b>${keyName(BIND.camera[0])}</b> camera · <b>${keyName(BIND.flare[0])}</b> flare · <b>${keyName(BIND.ledger[0])}</b> ledger · <b>${keyName(BIND.plan[0])}</b> plan`;
+function refreshKeyHints(){if(typeof coarse!=='undefined'&&coarse){const hk=$('#helpk');if(hk)hk.innerHTML='<b>Left thumb</b> move (push up and let go to auto-walk) · <b>right thumb</b> look around, up and down · double-tap to level the view · <b>hand</b> use · tools on the right · Controls for gyro aim and layout';}CLOSE=`<div class="closebar"><button data-close>Close · ${keyName(BIND.use[0])}</button></div>`;const dm=document.querySelector('#dialog .more');if(dm)dm.textContent=keyName(BIND.use[0])+' ▸';
+  const hk=$('#helpk');if(hk&&!(typeof coarse!=='undefined'&&coarse))hk.innerHTML=`<b>${keyName(BIND.forward[0])}${keyName(BIND.left[0])}${keyName(BIND.back[0])}${keyName(BIND.right[0])}</b> move · <b>mouse</b> or <b>${KN('turnL')} ${KN('turnR')}</b> look · <b>${keyName(BIND.use[0])}</b> use and advance · <b>${keyName(BIND.torch[0])}</b> torch · <b>${keyName(BIND.receiver[0])}</b> receiver · <b>${keyName(BIND.camera[0])}</b> camera · <b>${keyName(BIND.flare[0])}</b> flare · <b>${keyName(BIND.ledger[0])}</b> ledger · <b>${keyName(BIND.plan[0])}</b> plan`;
   if(typeof refreshBelt==='function'&&S)refreshBelt();const k=$('#keys');if(k)k.innerHTML=`${keyName(BIND.forward[0])}${keyName(BIND.left[0])}${keyName(BIND.back[0])}${keyName(BIND.right[0])} move · mouse / ${KN('turnL')} · ${KN('turnR')} look<br>${keyName(BIND.use[0])} use · ${keyName(BIND.torch[0])} torch · ${keyName(BIND.receiver[0])} receiver · ${keyName(BIND.camera[0])} camera · ${keyName(BIND.flare[0])} flare · ${keyName(BIND.ledger[0])} ledger · ${keyName(BIND.plan[0])} plan · Esc pause`}
 function openControls(){const el=$('#ctl');el.hidden=false;buildControls();setTimeout(()=>{const b=$('#ctlClose');b&&b.focus()},30)}
 function buildControls(){const el=$('#ctlBody');if(!el)return;
   el.innerHTML=`<table class="ctl"><thead><tr><th>Action</th><th>Key</th><th>Alternate</th></tr></thead><tbody>${ACTIONS.map(a=>`<tr><td>${a[1]}</td>${[0,1].map(i=>`<td><button class="kb${REBIND&&REBIND[0]===a[0]&&REBIND[1]===i?' wait':''}" id="kb_${a[0]}_${i}" data-a="${a[0]}" data-i="${i}">${REBIND&&REBIND[0]===a[0]&&REBIND[1]===i?'Press a key…':keyName(BIND[a[0]][i])}</button></td>`).join('')}</tr>`).join('')}</tbody></table>
   <div class="row" style="margin-top:12px"><label for="sens" style="font-size:19px">Mouse sensitivity <span id="sensv">${GX.sens.toFixed(2)}</span></label><input type="range" id="sens" min="0.3" max="2.5" step="0.05" value="${GX.sens}" style="max-width:260px"></div>
-  <div class="row"><label style="font-size:19px"><input type="checkbox" id="invertTurn" ${GX.invertTurn?'checked':''}> Invert horizontal mouse</label><span class="dim" style="font-size:16px">Esc always pauses. Delete clears a slot.</span></div>`;
+  <div class="row"><label style="font-size:19px"><input type="checkbox" id="invertTurn" ${GX.invertTurn?'checked':''}> Invert horizontal mouse</label><label style="font-size:19px"><input type="checkbox" id="invertY" ${GX.invertY?'checked':''}> Invert vertical mouse</label><span class="dim" style="font-size:16px">Esc always pauses. Delete clears a slot.</span></div>`;
   el.querySelectorAll('.kb').forEach(b=>b.onclick=e=>{e.stopPropagation();REBIND=[b.dataset.a,+b.dataset.i];buildControls()});
   $('#sens').oninput=e=>{GX.sens=+e.target.value;$('#sensv').textContent=GX.sens.toFixed(2);saveGfx()};
-  $('#invertTurn').onchange=e=>{GX.invertTurn=e.target.checked;saveGfx()};}
+  $('#invertTurn').onchange=e=>{GX.invertTurn=e.target.checked;saveGfx()};$('#invertY').onchange=e=>{GX.invertY=e.target.checked;saveGfx()};
+  if(coarse){el.insertAdjacentHTML('afterbegin',touchSettingsHTML()+'<h3 class="ctlh">Keyboard</h3>');bindTouchSettings()}}
 function captureRebind(e){if(!REBIND)return false;e.preventDefault();e.stopPropagation();const [a,i]=REBIND;REBIND=null;
   if(e.code!=='Escape'){if(e.code==='Delete'){BIND[a][i]=undefined}else{for(const k in BIND)BIND[k]=BIND[k].map(c=>c===e.code?undefined:c);BIND[a][i]=e.code}
     for(const k in BIND){BIND[k]=BIND[k].filter(Boolean);if(!BIND[k].length)BIND[k]=ACTIONS.find(x=>x[0]===k)[2].slice(0,1)}saveBinds();refreshKeyHints()}
@@ -2630,24 +2678,148 @@ addEventListener('keyup',e=>{keys[e.code]=false});
 addEventListener('blur',()=>{for(const k in keys)keys[k]=false});
 let view=$('#view');
 function onViewDown(e){if(mode!=='play'&&mode!=='abyss')return;if(D||!panel.hidden)return;
-  if(view.requestPointerLock&&document.pointerLockElement!==view){try{const p=view.requestPointerLock();if(p&&p.catch)p.catch(()=>{})}catch(err){}}dragging=true;lastMX=e.clientX}
+  if(view.requestPointerLock&&document.pointerLockElement!==view){try{const p=view.requestPointerLock();if(p&&p.catch)p.catch(()=>{})}catch(err){}}dragging=true;lastMX=e.clientX;onViewDown.y=e.clientY}
 view.addEventListener('mousedown',onViewDown);
 addEventListener('mouseup',()=>dragging=false);
-addEventListener('mousemove',e=>{if(document.pointerLockElement===view)mouseDX+=e.movementX;else if(dragging){mouseDX+=(e.clientX-lastMX)*1.6;lastMX=e.clientX}});
+addEventListener('mousemove',e=>{if(document.pointerLockElement===view){mouseDX+=e.movementX;mouseDY+=e.movementY}else if(dragging){mouseDX+=(e.clientX-lastMX)*1.6;mouseDY+=(e.clientY-(onViewDown.y??e.clientY))*1.6;lastMX=e.clientX;onViewDown.y=e.clientY}});
 $('#cine').addEventListener('click',e=>{if(e.target.id!=='skipbtn')cineNext&&cineNext()});
-// touch
-const coarse=matchMedia('(pointer:coarse)').matches;
+/* ================= MOBILE: landscape, touch controls, gyro, HUD layout =================
+   Phones always play in landscape. If the browser is portrait (rotation locked, or iOS which cannot lock),
+   the whole stage is rotated 90 degrees in CSS and touch input is mapped back into the rotated frame.
+   Controls follow mobile shooter conventions: floating left stick with auto-walk lock, drag anywhere on the
+   right to look (both axes), a context action button, round tool buttons, optional gyro aim, editable layout. */
+const coarse=matchMedia('(pointer:coarse)').matches||('ontouchstart' in window&&navigator.maxTouchPoints>0);
+const MOB={rot:false,w:innerWidth,h:innerHeight};
+const TS={sens:1,sensY:.8,invY:false,gyro:false,gyroS:1,gyroInvX:false,gyroInvY:false,fixedStick:false,autoRun:true,haptics:true,full:true,opacity:.75,scale:1};
+try{Object.assign(TS,JSON.parse(store.get('lastfreq.touch')||'{}'))}catch(e){}
+function saveTS(){store.set('lastfreq.touch',JSON.stringify(TS))}
+function stageW(){return MOB.rot?innerHeight:innerWidth}
+function stageH(){return MOB.rot?innerWidth:innerHeight}
+/* screen point -> point in the stage's own (landscape) frame */
+function toLocal(cx,cy){return MOB.rot?{x:cy,y:innerWidth-cx}:{x:cx,y:cy}}
+function applyOrientation(){const root=document.documentElement,st=$('#stage');
+  MOB.rot=coarse&&innerHeight>innerWidth*1.05;root.classList.toggle('rot',MOB.rot);root.classList.toggle('touchui',coarse);
+  if(MOB.rot){st.style.width=innerHeight+'px';st.style.height=innerWidth+'px';st.style.transform=`translateX(${innerWidth}px) rotate(90deg)`}
+  else{st.style.width='';st.style.height='';st.style.transform=''}
+  const w=stageW(),h=stageH();root.style.setProperty('--vw',(w/100)+'px');root.style.setProperty('--vh',(h/100)+'px');
+  root.classList.toggle('narrow',w<=560);root.classList.toggle('short',h<=520);
+  if(coarse)layoutHUD()}
+function goFullLandscape(){if(!coarse||!TS.full)return;const el=document.documentElement;
+  try{const p=el.requestFullscreen?el.requestFullscreen({navigationUI:'hide'}):el.webkitRequestFullscreen?el.webkitRequestFullscreen():null;
+    Promise.resolve(p).then(()=>{if(screen.orientation&&screen.orientation.lock)return screen.orientation.lock('landscape')}).catch(()=>{}).finally(()=>setTimeout(()=>{applyOrientation();resize()},350))}catch(e){}}
+function buzz(ms){if(TS.haptics&&navigator.vibrate)try{navigator.vibrate(ms)}catch(e){}}
+/* ---------- vertical look, shared by mouse, keys, touch and gyro ---------- */
+let PITCH=0,mouseDY=0;const PMAX=.3;
+function addPitch(v){PITCH=clamp(PITCH+v,-PMAX,PMAX)}
+/* ---------- HUD layout: positions are fractions of the stage, sizes in px; editable and saved ---------- */
+const HUDDEF={use:{x:.885,y:.66,s:88},cam:{x:.77,y:.8,s:66},flare:{x:.945,y:.38,s:58},torch:{x:.8,y:.52,s:58},recv:{x:.665,y:.86,s:54},
+  ledger:{x:.79,y:.085,s:46},plan:{x:.865,y:.085,s:46},pause:{x:.945,y:.085,s:46},full:{x:.715,y:.085,s:46},stick:{x:.15,y:.7,s:132}};
+let HUD={};function loadHUD(){HUD=JSON.parse(JSON.stringify(HUDDEF));try{const v=JSON.parse(store.get('lastfreq.hud')||'null');if(v)for(const k in v)if(HUD[k])Object.assign(HUD[k],v[k])}catch(e){}}
+loadHUD();function saveHUD(){store.set('lastfreq.hud',JSON.stringify(HUD))}
+const HUDEL={use:'#tuse',cam:'#tcam',flare:'#tflare',torch:'#ttorch',recv:'#trecv',ledger:'#tnote',plan:'#tmap',pause:'#tpause',full:'#tfull'};
+function layoutHUD(){const w=stageW(),h=stageH(),k=Math.min(1.25,Math.max(.72,h/420))*TS.scale;
+  for(const id in HUDEL){const e=$(HUDEL[id]);if(!e)continue;const p=HUD[id],s=Math.round(p.s*k);e.style.width=e.style.height=s+'px';e.style.left=Math.round(p.x*w-s/2)+'px';e.style.top=Math.round(p.y*h-s/2)+'px'}
+  $('#touch').style.opacity=HUDEDIT.on?1:TS.opacity;
+  const sb=$('#stickbase');if(sb){const p=HUD.stick,s=Math.round(p.s*k);sb.style.width=sb.style.height=s+'px';sb.style.left=Math.round(p.x*w-s/2)+'px';sb.style.top=Math.round(p.y*h-s/2)+'px';STK.r=s/2}
+  $('#tfull').hidden=!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen)}
+/* ---------- the stick ---------- */
+const STK={id:null,ox:0,oy:0,r:66,lock:false,lockPending:false};
+const look={id:null,x:0,y:0,lastTap:0};
+function stickMove(lx,ly){const dx=lx-STK.ox,dy=ly-STK.oy,d=Math.hypot(dx,dy),r=STK.r,cl=Math.min(d,r),ux=d?dx/d:0,uy=d?dy/d:0;
+  const k=Math.min(1,d/(r*.85));touchMove.f=-uy*k;touchMove.s=ux*k;
+  $('#stickknob').style.transform=`translate(${ux*cl*.62}px,${uy*cl*.62}px)`;
+  STK.lockPending=TS.autoRun&&-dy>r*1.35&&Math.abs(dx)<r*.7;$('#stickbase').classList.toggle('lockarm',STK.lockPending)}
+function stickRelease(){STK.id=null;$('#stickknob').style.transform='';$('#stickbase').classList.remove('lockarm','active');
+  if(STK.lockPending){STK.lock=true;STK.lockPending=false;touchMove.f=1;touchMove.s=0;$('#stickbase').classList.add('locked');buzz(15)}else{touchMove.f=0;touchMove.s=0}
+  if(!TS.fixedStick)layoutHUD()}
+function cancelLock(){if(STK.lock){STK.lock=false;touchMove.f=0;$('#stickbase').classList.remove('locked')}}
+/* ---------- touch routing ---------- */
+const tmz=$('#tmove'),tlk=$('#tlook');
+function moveStart(e){if(HUDEDIT.on)return;for(const t of e.changedTouches){if(STK.id!==null)break;const L=toLocal(t.clientX,t.clientY);STK.id=t.identifier;
+    if(STK.lock){cancelLock()}
+    if(!TS.fixedStick){const sb=$('#stickbase'),s=sb.offsetWidth;sb.style.left=(L.x-s/2)+'px';sb.style.top=(L.y-s/2)+'px';STK.ox=L.x;STK.oy=L.y}
+    else{const p=HUD.stick;STK.ox=p.x*stageW();STK.oy=p.y*stageH()}
+    $('#stickbase').classList.add('active');stickMove(L.x,L.y)}e.preventDefault()}
+function lookStart(e){if(HUDEDIT.on)return;for(const t of e.changedTouches){if(look.id!==null)break;const L=toLocal(t.clientX,t.clientY);look.id=t.identifier;look.x=L.x;look.y=L.y;
+    const now2=performance.now();if(now2-look.lastTap<280){PITCH=0;buzz(8)}look.lastTap=now2}e.preventDefault()}
+tmz.addEventListener('touchstart',moveStart,{passive:false});tlk.addEventListener('touchstart',lookStart,{passive:false});
+addEventListener('touchmove',e=>{for(const t of e.changedTouches){const L=toLocal(t.clientX,t.clientY);
+    if(t.identifier===STK.id)stickMove(L.x,L.y);
+    if(t.identifier===look.id){const dx=L.x-look.x,dy=L.y-look.y;look.x=L.x;look.y=L.y;const k=520/Math.max(320,stageH());
+      touchTurn+=dx*TS.sens*k;addPitch(-dy*.0022*TS.sensY*k*(TS.invY?-1:1))}
+    if(SCR.id===t.identifier&&SCR.el){const d=L.y-SCR.y;SCR.y=L.y;SCR.el.scrollTop-=d;if(SCR.horiz){SCR.el.scrollLeft-=L.x-SCR.x;SCR.x=L.x}e.preventDefault()}}},{passive:false});
+function touchEnd(e){for(const t of e.changedTouches){if(t.identifier===STK.id)stickRelease();if(t.identifier===look.id)look.id=null;if(t.identifier===SCR.id)SCR.id=null}}
+addEventListener('touchend',touchEnd);addEventListener('touchcancel',touchEnd);
+/* scrolling inside panels, written by hand so it also works in the rotated stage */
+const SCR={id:null,el:null,y:0,x:0,horiz:false};
+function scrollable(el){while(el&&el!==document.body){const cs=getComputedStyle(el);if((/(auto|scroll)/.test(cs.overflowY)&&el.scrollHeight>el.clientHeight+2)||(/(auto|scroll)/.test(cs.overflowX)&&el.scrollWidth>el.clientWidth+2))return el;el=el.parentElement}return null}
+addEventListener('touchstart',e=>{if(!coarse)return;const t=e.changedTouches[0];if(!t||t.target.closest('#touch'))return;if(t.target.tagName==='INPUT'&&t.target.type==='range')return;
+  const el=scrollable(t.target);if(el){const L=toLocal(t.clientX,t.clientY);SCR.id=t.identifier;SCR.el=el;SCR.y=L.y;SCR.x=L.x;SCR.horiz=el.scrollWidth>el.clientWidth+2}},{passive:true});
+/* range sliders (the receiver's dials) driven by hand too, so they track the finger in the rotated stage */
+addEventListener('touchstart',e=>{const t=e.changedTouches[0];if(!t||t.target.tagName!=='INPUT'||t.target.type!=='range'||!MOB.rot)return;const el=t.target;
+  const set=tt=>{const r=el.getBoundingClientRect();  // rotated stage: the slider's length runs down the screen
+    const f=clamp((tt.clientY-r.top)/Math.max(1,r.height),0,1),mn=+el.min||0,mx=+el.max||100;el.value=mn+(mx-mn)*f;el.dispatchEvent(new Event('input',{bubbles:true}))};
+  set(t);const mv=ev=>{for(const q of ev.changedTouches)if(q.identifier===t.identifier){set(q);ev.preventDefault()}};const up=ev=>{for(const q of ev.changedTouches)if(q.identifier===t.identifier){removeEventListener('touchmove',mv);removeEventListener('touchend',up)}};
+  addEventListener('touchmove',mv,{passive:false});addEventListener('touchend',up);e.preventDefault()},{passive:false,capture:true});
+/* ---------- buttons ---------- */
+function tbtn(sel,fn){const b=$(sel);if(!b)return;b.addEventListener('touchstart',e=>{e.preventDefault();e.stopPropagation();if(HUDEDIT.on)return hudGrab(b,e);b.classList.add('down');buzz(10);fn()},{passive:false});
+  b.addEventListener('touchend',()=>b.classList.remove('down'));b.addEventListener('click',e=>{if(!HUDEDIT.on)fn()})}
+const playing=()=>mode==='play'&&!D&&panel.hidden&&$('#pause').hidden;
+tbtn('#tuse',()=>{if(D)advance();else if(!panel.hidden&&!tuner&&!GEN&&!HATCH)closePanel(true);else if(mode==='play')interact()});
+tbtn('#tcam',()=>{if(playing()){takePhoto();buzz(25)}});
+tbtn('#tflare',()=>{if(playing()){throwFlare();buzz(40)}});
+tbtn('#ttorch',()=>{if(playing()){flashOn=!flashOn;noiseBurst({type:'bandpass',f:3000,q:5,v:.06,d:.02});refreshBelt()}});
+tbtn('#trecv',()=>{if(playing())toggleReceiver()});
+tbtn('#tnote',()=>{if(playing())openLedger()});
+tbtn('#tmap',()=>{if(playing())openPlan()});
+tbtn('#tpause',()=>{if(mode==='play'||mode==='abyss')togglePause($('#pause').hidden)});
+tbtn('#tfull',()=>{if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document)}else{const was=TS.full;TS.full=true;goFullLandscape();TS.full=was}});
+/* the context button says what it will do */
+function touchTick(){if(!coarse)return;const st=$('#stage'),ui=D?'dlg':(!panel.hidden?'panel':'');if(st.dataset.ui!==ui)st.dataset.ui=ui;
+  let lab='USE',hot=false;if(focus){hot=true;if(focus.kind==='obj'){const o=focus.o;lab=['helena','helenaG','arthur','nikolai','june','samuelK','samuelT'].includes(o.id)?'TALK':o.id.startsWith('fl')||o.id==='mm'||o.id==='film'?'TAKE':o.id.startsWith('d_')?'READ':'LOOK'}else lab={6:'OPEN',7:'OPEN',9:'LIFT',10:'OPEN',5:'LOOK',4:'READ'}[focus.v]||'USE'}
+  const u=$('#tuse');if(u.dataset.l!==lab){u.dataset.l=lab;u.querySelector('b').textContent=lab}u.classList.toggle('hot',hot);
+  $('#ttorch').classList.toggle('on',flashOn);$('#trecv').classList.toggle('on',RECV.on);
+  const fc=$('#tflare i'),cc=$('#tcam i');if(fc&&S&&S.flares!=null)fc.textContent=S.flares;if(cc&&S&&S.film!=null)cc.textContent=S.film}
+/* ---------- gyro aim ---------- */
+let gyroOn=false;
+function gyroHandler(e){if(!TS.gyro||!(mode==='play'||mode==='abyss')||D||!panel.hidden)return;const r=e.rotationRate;if(!r)return;
+  const ang=MOB.rot?90:((screen.orientation&&screen.orientation.angle)||window.orientation||0),iv=e.interval||16,dt=Math.min(.05,iv>1?iv/1000:iv);
+  const sgn=(ang===90||ang===-270)?1:-1,yaw=(r.beta||0)*sgn,pit=(r.gamma||0)*-sgn;  // landscape: world-vertical axis lies along the device's x axis
+  touchTurn+=-yaw*dt*TS.gyroS*(TS.gyroInvX?-1:1)/.006*Math.PI/180;addPitch(pit*dt*TS.gyroS*(TS.gyroInvY?-1:1)*.012)}
+function enableGyro(on){TS.gyro=on;saveTS();if(!on)return;
+  const go=()=>{if(!gyroOn){addEventListener('devicemotion',gyroHandler);gyroOn=true}};
+  if(window.DeviceMotionEvent&&typeof DeviceMotionEvent.requestPermission==='function')DeviceMotionEvent.requestPermission().then(r=>{if(r==='granted')go();else{TS.gyro=false;saveTS();toast('Motion access was not allowed')}}).catch(()=>{});else go()}
+if(TS.gyro&&!(window.DeviceMotionEvent&&typeof DeviceMotionEvent.requestPermission==='function'))enableGyro(true);
+/* ---------- HUD editor: drag any control, resize the selected one ---------- */
+const HUDEDIT={on:false,sel:null};
+function hudEdit(on){HUDEDIT.on=on;$('#hudedit').hidden=!on;$('#stage').classList.toggle('hudedit',on);if(on){$('#ctl').hidden=true;$('#pause').hidden=true;HUDEDIT.sel=null}else{saveHUD();if(mode==='play')togglePause(true)}layoutHUD()}
+function hudGrab(b,e){const id=Object.keys(HUDEL).find(k=>HUDEL[k]==='#'+b.id)||'stick';HUDEDIT.sel=id;for(const x of document.querySelectorAll('#touch .sel'))x.classList.remove('sel');b.classList.add('sel');
+  const t=e.changedTouches[0],tid=t.identifier;const mv=ev=>{for(const q of ev.changedTouches)if(q.identifier===tid){const L=toLocal(q.clientX,q.clientY);HUD[id].x=clamp(L.x/stageW(),.04,.96);HUD[id].y=clamp(L.y/stageH(),.06,.94);layoutHUD();ev.preventDefault()}};
+  const up=ev=>{for(const q of ev.changedTouches)if(q.identifier===tid){removeEventListener('touchmove',mv);removeEventListener('touchend',up)}};addEventListener('touchmove',mv,{passive:false});addEventListener('touchend',up)}
+$('#stickbase').addEventListener('touchstart',e=>{if(HUDEDIT.on){e.preventDefault();hudGrab($('#stickbase'),e)}},{passive:false});
+$('#hudBig').onclick=()=>{const s=HUDEDIT.sel;if(s){HUD[s].s=Math.min(180,HUD[s].s*1.12);layoutHUD()}};
+$('#hudSmall').onclick=()=>{const s=HUDEDIT.sel;if(s){HUD[s].s=Math.max(34,HUD[s].s/1.12);layoutHUD()}};
+$('#hudMirror').onclick=()=>{for(const k in HUD)HUD[k].x=1-HUD[k].x;layoutHUD()};
+$('#hudReset').onclick=()=>{HUD=JSON.parse(JSON.stringify(HUDDEF));layoutHUD()};
+$('#hudDone').onclick=()=>hudEdit(false);
+/* ---------- touch settings, shown inside the Controls screen ---------- */
+function touchSettingsHTML(){const sl=(id,lab,min,max,st,v)=>`<div class="row"><label for="${id}" style="font-size:18px">${lab} <span id="${id}v">${(+v).toFixed(2)}</span></label><input type="range" id="${id}" min="${min}" max="${max}" step="${st}" value="${v}" style="max-width:240px"></div>`;
+  const ck=(id,lab,v)=>`<label style="font-size:18px;display:inline-flex;gap:6px;align-items:center;margin-right:14px"><input type="checkbox" id="${id}" ${v?'checked':''}> ${lab}</label>`;
+  return `<h3 class="ctlh">Touch</h3>${sl('tsSens','Look speed',.3,3,.05,TS.sens)}${sl('tsSensY','Vertical look speed',.2,3,.05,TS.sensY)}${sl('tsOp','Button opacity',.25,1,.05,TS.opacity)}${sl('tsScale','Button size',.7,1.5,.05,TS.scale)}
+   <div class="row" style="flex-wrap:wrap;justify-content:flex-start">${ck('tsInvY','Invert vertical',TS.invY)}${ck('tsFixed','Fixed joystick',TS.fixedStick)}${ck('tsAuto','Auto-walk (push stick up and release)',TS.autoRun)}${ck('tsHap','Vibration',TS.haptics)}${ck('tsFull','Full screen on start',TS.full)}</div>
+   <h3 class="ctlh">Gyroscope aim</h3><div class="row" style="flex-wrap:wrap;justify-content:flex-start">${ck('tsGyro','Aim by moving the phone',TS.gyro)}${ck('tsGX','Invert gyro horizontal',TS.gyroInvX)}${ck('tsGY','Invert gyro vertical',TS.gyroInvY)}</div>${sl('tsGyroS','Gyro speed',.2,3,.05,TS.gyroS)}
+   <div class="gbtns" style="margin-top:10px"><button id="tsEdit">Edit button layout</button></div>`}
+function bindTouchSettings(){const rs=(id,k)=>{const e=$('#'+id);if(!e)return;e.oninput=()=>{TS[k]=+e.value;$('#'+id+'v').textContent=TS[k].toFixed(2);saveTS();if(k==='opacity'||k==='scale')layoutHUD()}};
+  rs('tsSens','sens');rs('tsSensY','sensY');rs('tsOp','opacity');rs('tsScale','scale');rs('tsGyroS','gyroS');
+  const cb=(id,k,f)=>{const e=$('#'+id);if(!e)return;e.onchange=()=>{if(f)f(e.checked);else{TS[k]=e.checked;saveTS()}layoutHUD()}};
+  cb('tsInvY','invY');cb('tsFixed','fixedStick');cb('tsAuto','autoRun');cb('tsHap','haptics');cb('tsFull','full');cb('tsGX','gyroInvX');cb('tsGY','gyroInvY');cb('tsGyro','gyro',v=>enableGyro(v));
+  const ed=$('#tsEdit');if(ed)ed.onclick=()=>{$('#touch').hidden=false;hudEdit(true)}}
+addEventListener('resize',()=>{applyOrientation()});
+addEventListener('orientationchange',()=>setTimeout(()=>{applyOrientation();resize()},250));
+document.addEventListener('fullscreenchange',()=>setTimeout(()=>{applyOrientation();resize()},250));
 if(coarse){$('#touch').hidden=false;$('#keys').hidden=true;$('#belt').hidden=true}
-let stickId=null,stickO=null,lookId=null,lookX=0;const stick=$('#stick');
-$('#tlz').addEventListener('touchstart',e=>{const t=e.changedTouches[0];stickId=t.identifier;stickO=[t.clientX,t.clientY];stick.hidden=false;stick.style.left=(t.clientX-45)+'px';stick.style.top=(t.clientY-45)+'px';e.preventDefault()},{passive:false});
-$('#trz').addEventListener('touchstart',e=>{const t=e.changedTouches[0];lookId=t.identifier;lookX=t.clientX;e.preventDefault()},{passive:false});
-addEventListener('touchmove',e=>{for(const t of e.changedTouches){if(t.identifier===stickId){const dx=clamp((t.clientX-stickO[0])/40,-1,1),dy=clamp((t.clientY-stickO[1])/40,-1,1);touchMove.f=-dy;touchMove.s=dx;stick.firstElementChild.style.transform=`translate(${dx*30}px,${dy*30}px)`}
-  if(t.identifier===lookId){touchTurn+=(t.clientX-lookX);lookX=t.clientX}}},{passive:true});
-addEventListener('touchend',e=>{for(const t of e.changedTouches){if(t.identifier===stickId){stickId=null;touchMove.f=0;touchMove.s=0;stick.hidden=true}if(t.identifier===lookId)lookId=null}});
-$('#tuse').onclick=()=>{if(D)advance();else if(!panel.hidden&&!tuner)closePanel(true);else if(mode==='play')interact()};
-$('#tnote').onclick=()=>{if(mode==='play'&&!D&&panel.hidden)openLedger()};
-$('#trecv').onclick=()=>{if(mode==='play'&&!D&&panel.hidden)toggleReceiver()};$('#tcam').onclick=()=>takePhoto();$('#tflare').onclick=()=>throwFlare();
-$('#tmap').onclick=()=>{if(mode==='play'&&!D&&panel.hidden)openPlan()};
+applyOrientation();
+
 
 /* ================= INTERACTION ================= */
 let flashOn=true,focus=null;
@@ -2669,9 +2841,9 @@ function interact(){const f=findFocus();if(!f)return;investigated('examine');if(
 /* ================= GRAPHICS SETTINGS ================= */
 const QP={low:{h:360,dpr:1,bloom:0,dust:30,lpass:0,shadows:false,fog:.8,label:'Low 360p'},medium:{h:540,dpr:1.5,bloom:.6,dust:60,lpass:1,shadows:true,fog:1,label:'Medium 540p'},high:{h:720,dpr:2,bloom:.85,dust:100,lpass:2,shadows:true,fog:1.1,label:'High 720p'},ultra:{h:1080,dpr:2,bloom:.9,dust:150,lpass:2,shadows:true,fog:1.1,label:'Ultra 1080p'}};
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const GX={sens:1,invertTurn:false,q:(()=>{const c=navigator.hardwareConcurrency||2;return matchMedia('(pointer:coarse)').matches||c<=2?'low':c>=8?'high':'medium'})(),post:true,crt:true,distort:!reduceMotion,auto:true,scale:1,rt:4,fpsE:60,av:0};
-try{const sv=JSON.parse(store.get('lastfreq.gfx')||'null');if(sv){for(const k of['q','post','crt','distort','auto','sens','invertTurn'])if(k in sv)GX[k]=sv[k];if(!QP[GX.q])GX.q='medium'}}catch(e){}
-function saveGfx(){store.set('lastfreq.gfx',JSON.stringify({q:GX.q,post:GX.post,crt:GX.crt,distort:GX.distort,auto:GX.auto,sens:GX.sens,invertTurn:GX.invertTurn}))}
+const GX={sens:1,invertTurn:false,invertY:false,q:(()=>{const c=navigator.hardwareConcurrency||2;return coarse||c<=2?'low':c>=8?'high':'medium'})(),post:true,crt:true,distort:!reduceMotion,auto:true,scale:1,rt:4,fpsE:60,av:0};
+try{const sv=JSON.parse(store.get('lastfreq.gfx')||'null');if(sv){for(const k of['q','post','crt','distort','auto','sens','invertTurn','invertY'])if(k in sv)GX[k]=sv[k];if(!QP[GX.q])GX.q='medium'}}catch(e){}
+function saveGfx(){store.set('lastfreq.gfx',JSON.stringify({q:GX.q,post:GX.post,crt:GX.crt,distort:GX.distort,auto:GX.auto,sens:GX.sens,invertTurn:GX.invertTurn,invertY:GX.invertY}))}
 /* visual effect state, driven by game and audio events */
 const FX={glitch:0,ca:0,warp:0,flick:0,stress:0,roll:0,rollV:0};
 function fxTick(dt){FX.glitch*=Math.exp(-dt*5);FX.ca*=Math.exp(-dt*3);FX.flick*=Math.exp(-dt*8);FX.warp*=Math.exp(-dt*2);FX.stress*=Math.exp(-dt*2);
@@ -2755,7 +2927,7 @@ function present(src){
     if(GX.post&&GX.distort&&FX.glitch>.15){for(let k=0;k<3;k++){const y=(Math.random()*H)|0,hh=2+((Math.random()*6)|0);g.drawImage(c,0,y,W,hh,((Math.random()-.5)*14*FX.glitch)|0,y,W,hh)}}
     if(GX.post&&FX.flick>.05){g.fillStyle=`rgba(0,0,0,${Math.min(.6,FX.flick*.5*Math.random())})`;g.fillRect(0,0,W,H)}}
 }
-function resize(){const a=clamp(innerWidth/Math.max(1,innerHeight),.4,2.6),p=QP[GX.q],px=p.h*p.h*16/9*GX.scale*GX.scale;W=Math.max(120,Math.round(Math.sqrt(px*a)/2)*2);H=Math.max(120,Math.round(W/a/2)*2);
+function resize(){const a=clamp(stageW()/Math.max(1,stageH()),.4,2.6),p=QP[GX.q],px=p.h*p.h*16/9*GX.scale*GX.scale;W=Math.max(120,Math.round(Math.sqrt(px*a)/2)*2);H=Math.max(120,Math.round(W/a/2)*2);
   scr.width=W;scr.height=H;MAIN=makeTarget(sctx,W,H);GFX.tw=-1;sizeWorkers();initDust(p.dust);$('#stage').classList.toggle('nocrt',!(GX.post&&GX.crt));refreshGfxInfo()}
 let rzT=0;addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(resize,120)});
 function adapt(){if(!GX.auto)return;GX.adT=(GX.adT||0)+1;if(GX.adT<90)return;GX.adT=0;
@@ -2782,7 +2954,7 @@ function angD(a,b){let d=a-b;while(d>Math.PI)d-=Math.PI*2;while(d<-Math.PI)d+=Ma
 function drawWorld(dt){
   const t0=performance.now();computeLights();
   const moving=mode==='play'&&(keys.KeyW||keys.KeyS||keys.KeyA||keys.KeyD||keys.ArrowUp||keys.ArrowDown||touchMove.f||touchMove.s)&&!D&&panel.hidden&&$('#pause').hidden;
-  const hor=H/2+(moving?Math.sin(bob)*H*.008:0);
+  const hor=H/2+PITCH*H+(moving?Math.sin(bob)*H*.008:0);
   const av=angD(P.a,frame.pa==null?P.a:frame.pa)/Math.max(dt,.001);frame.pa=P.a;GX.av=GX.av*.85+av*.15;
   MAIN.ox=clamp(Math.round(-GX.av*MAIN.pad*.16),-MAIN.pad,MAIN.pad);MAIN.oy=clamp(Math.round((moving?Math.sin(bob*.5)*MAIN.pad*.12:0)+Math.sin(TT*.9)*MAIN.pad*.035),-MAIN.pad,MAIN.pad);
   let fs=flashOn?(S.act>=4?.9+(.1*Math.sin(TT*13))*(hash(Math.floor(TT*3))<.15?4:0):1.05):0;
@@ -2795,14 +2967,14 @@ function frame(t){frameNo++;
   const dt=Math.min(.05,(t-(frame.l||t))/1000);frame.l=t;TT+=dt;if(dt>0)GX.fpsE=GX.fpsE*.95+Math.min(144,1/dt)*.05;
   dialogTick(dt);audioTick(dt);if(tuner)tunerTick(dt);fxTick(dt);
   if(mode==='play'||mode==='cut'){
-    if(mode==='play'){playTick(dt);stalkerTick(dt);recvTick(dt);anomTick();if(Math.floor(TT*2)!==frame.lt){frame.lt=Math.floor(TT*2);ledgerTick();adviceTick()}}flareTick(dt);partTick(dt);
+    if(mode==='play'||mode==='abyss')touchTick();if(mode==='play'){playTick(dt);stalkerTick(dt);recvTick(dt);anomTick();if(Math.floor(TT*2)!==frame.lt){frame.lt=Math.floor(TT*2);ledgerTick();adviceTick()}}flareTick(dt);partTick(dt);
     if(!panel.hidden){if(GEN)genTick(dt);if(HATCH)hatchTick(dt);if(Math.floor(TT*30)!==frame.at&&sheet.querySelector('#atlascv')){frame.at=Math.floor(TT*30);atlasTick()}}
     drawWorld(dt);
     if(mode==='play'){focus=(D||!panel.hidden)?null:findFocus();setHTML('#prompt',promptText(focus));setHTML('#caption',`VOSTOK-9 · <b>${roomAt(P.x,P.y)||'—'}</b>`);drawWrist();
       if(monitorOn&&Math.floor(TT*12)!==frame.m){frame.m=Math.floor(TT*12);monitorTick()}
       if(reconOn)reconTick();
       if(!$('#pause').hidden&&Math.floor(TT*2)!==frame.gi){frame.gi=Math.floor(TT*2);refreshGfxInfo()}}
-  } else if(mode==='abyss'){abyssTick(dt);abyssDraw(sctx,W,H);present('canvas');setHTML('#prompt','');setHTML('#caption','VOSTOK-9 · <b>DEPTH 0000 M</b>');drawWrist()}
+  } else if(mode==='abyss'){touchTick();abyssTick(dt);abyssDraw(sctx,W,H);present('canvas');setHTML('#prompt','');setHTML('#caption','VOSTOK-9 · <b>DEPTH 0000 M</b>');drawWrist()}
   else if(mode==='cine'){cineT+=dt;drawCine(sctx);present('canvas')}
   else if(mode==='title'){drawTitleScene(sctx);present('canvas');setHTML('#ttag',TMARK&&(TT%17)<.14?'A listening station four hundred metres under the ice is receiving a signal that remembers what has not happened yet. One person will reach the station.':'A listening station four hundred metres under the ice is receiving a signal that remembers what has not happened yet.')}
   else if(mode==='end'){drawEndScene(sctx);present('canvas')}
@@ -2853,7 +3025,7 @@ function playTick(dt){
   let f=0,s=0,turn=0;
   if(K('forward'))f+=1;if(K('back'))f-=1;if(K('left'))s-=1;if(K('right'))s+=1;if(K('turnL'))turn-=1;if(K('turnR'))turn+=1;
   f+=touchMove.f;s+=touchMove.s;
-  P.a+=turn*1.9*dt+mouseDX*.0025*GX.sens*(GX.invertTurn?-1:1)+touchTurn*.006;mouseDX=0;touchTurn=0;
+  P.a+=turn*1.9*dt+mouseDX*.0025*GX.sens*(GX.invertTurn?-1:1)+touchTurn*.006;mouseDX=0;touchTurn=0;if(K('lookUp'))addPitch(.55*dt);if(K('lookDown'))addPitch(-.55*dt);addPitch(-mouseDY*.0011*GX.sens*(GX.invertY?-1:1));mouseDY=0;
   const dx=Math.cos(P.a),dy=Math.sin(P.a),len=Math.hypot(f,s)||1,k=Math.min(1,len),sp=1.55*dt*k;
   if(f||s){const mx=(dx*f-dy*s)/len*sp,my=(dy*f+dx*s)/len*sp;const r=.2;
     if(!MAP[I((P.x+mx+Math.sign(mx)*r)|0,P.y|0)])P.x+=mx;if(!MAP[I(P.x|0,(P.y+my+Math.sign(my)*r)|0)])P.y+=my;
@@ -2879,6 +3051,7 @@ function refreshTitle(){for(const id of['gfxTvoxl','gfxPvoxl']){const e=$('#'+id
   $('#tfound').textContent=got.length?'ENDINGS FOUND  '+['A','B','C'].map(k=>got.includes(k)?k:'·').join('  '):'';
 }
 function startGame(cont){
+  goFullLandscape();cancelLock&&cancelLock();PITCH=0;
   initAudio();ST.on=false;ST.grace=0;FLARES.length=0;RECV.on=false;$('#recv').hidden=true;$('#title').hidden=true;$('#end').hidden=true;
   if(cont&&load(store.get('lastfreq.save'))){prevRunEcho();setLis();if(AU.ctx)ramp('station',1,1);mode='play';
     const names=['','ACT I','ACT II','ACT III','ACT IV','ACT V'];actCard(names[S.act]||'','Vostok-9',()=>{})}
