@@ -53,6 +53,9 @@ html,body{height:100%;background:var(--void);color:var(--phos);overflow:hidden;f
 #dialog{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));
   width:min(760px, calc(100% - 32px));background:repeating-linear-gradient(to bottom,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.18) 2px 3px),rgba(6,8,9,.9);border:1px solid #2c3432;padding:12px 16px 10px;
   box-shadow:0 0 0 1px rgba(0,0,0,.6), 0 10px 40px rgba(0,0,0,.6);cursor:pointer}
+#dialog.hasport{padding-left:calc(16px + var(--pw,104px) + 14px);min-height:calc(var(--pw,104px) + 24px)}
+#dport{position:absolute;left:12px;top:12px;width:var(--pw,104px);height:var(--pw,104px);image-rendering:pixelated;border:1px solid #2c3432;box-shadow:inset 0 0 0 1px rgba(0,0,0,.6)}
+html.short #dialog{--pw:76px}html.narrow #dialog{--pw:72px}
 #dialog .who{font-size:16px;letter-spacing:.22em;color:var(--amber);min-height:18px}
 #dialog .who.radio{color:#b56a70}
 #dialog .who.radio::before{content:"▚ ";}
@@ -299,7 +302,7 @@ html.narrow #dialog .txt{font-size:21px;min-height:48px}html.narrow #keys{displa
     <button class="tb sq" id="tpause" aria-label="Pause"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg></button>
   </div>
   <div id="hudedit" hidden><p>Drag any control to move it. Tap one to select it, then resize.</p><div class="gbtns"><button id="hudSmall">Smaller</button><button id="hudBig">Larger</button><button id="hudMirror">Mirror (left-handed)</button><button id="hudReset">Reset</button><button id="hudDone" class="primary">Done</button></div></div>
-  <div id="dialog" hidden><div class="who"></div><div class="txt"></div><div class="more">E ▸</div><div class="choices"></div></div>
+  <div id="dialog" hidden><canvas id="dport" width="128" height="128" hidden aria-hidden="true"></canvas><div class="who"></div><div class="txt"></div><div class="more">E ▸</div><div class="choices"></div></div>
   <div id="panel" hidden><div class="sheet" id="sheet"></div></div>
   <div id="card" hidden><div class="act"></div><div class="name"></div></div>
   <div id="cine" hidden><div class="cl"></div><button class="skip" id="skipbtn" hidden>Let it end</button></div>
@@ -554,38 +557,398 @@ function voidTex(w,h,seed,draw,eyes){const c=mkC(w,h),g=c.getContext('2d',{willR
     e[i]=Math.round(255*clamp(1-(dm-1)/3,0,1))}
   if(eyes)for(const [x,y] of eyes){const i=y*w+x;if(u[i])e[i]=255}
   t.e=e;return t}
-function person(o){
-  return (g,r,w,h)=>{
-    const cx=w/2+(o.dx||0),hu=o.hunch||0,hem=o.long?58:47;
-    g.fillStyle='#0b0d0e';g.fillRect(cx-6.5,58,5.5,6);g.fillRect(cx+1,58,5.5,6);
-    g.fillStyle=o.pants||'#1a1d1f';g.fillRect(cx-6,44,5,15);g.fillRect(cx+1,44,5,15);
-    g.fillStyle=o.coat;g.beginPath();g.moveTo(cx-8,18+hu);g.quadraticCurveTo(cx,16+hu,cx+8,18+hu);g.lineTo(cx+10,hem);g.lineTo(cx-10,hem);g.closePath();g.fill();
-    g.beginPath();g.moveTo(cx-8,19+hu);g.lineTo(cx-11.5,23+hu);g.lineTo(cx-11,43+hu*.5);g.lineTo(cx-7.5,43+hu*.5);g.lineTo(cx-7,24+hu);g.closePath();g.fill();
-    g.beginPath();g.moveTo(cx+8,19+hu);g.lineTo(cx+11.5,23+hu);g.lineTo(cx+11,43+hu*.5);g.lineTo(cx+7.5,43+hu*.5);g.lineTo(cx+7,24+hu);g.closePath();g.fill();
-    g.fillStyle=o.face;g.fillRect(cx-11,43+hu*.5,3,3);g.fillRect(cx+8,43+hu*.5,3,3);
-    g.fillStyle='rgba(0,0,0,.35)';g.fillRect(cx-.5,20+hu,1,hem-21-hu);g.fillRect(cx-8,36,6,1);g.fillRect(cx+2,36,6,1);g.fillRect(cx-8,hem-1,18,1);
-    g.fillStyle='rgba(255,255,255,.06)';g.fillRect(cx-7,20+hu,2,20);
-    if(o.collar){g.fillStyle=o.collar;g.fillRect(cx-4,18+hu,8,4)}
-    g.fillStyle=o.hair||'#0d0f10';g.beginPath();g.ellipse(cx,10+hu,6,7.5,0,0,Math.PI*2);g.fill();if(o.longHair)g.fillRect(cx-6,10+hu,12,14);
-    g.fillStyle=o.face;g.beginPath();g.ellipse(cx,12+hu,4,5,0,0,Math.PI*2);g.fill();
-    g.fillStyle='rgba(0,0,0,.4)';g.fillRect(cx-2.6,11.4+hu,1.7,1);g.fillRect(cx+.9,11.4+hu,1.7,1);g.fillStyle='rgba(0,0,0,.22)';g.fillRect(cx-1.4,15.4+hu,2.8,.6);
-    g.fillStyle='rgba(0,0,0,.28)';g.beginPath();g.ellipse(cx,17.2+hu,3.6,1.4,0,0,7);g.fill();
-    if(o.extra)o.extra(g,cx,hu);
-    for(let i=0;i<90;i++){g.fillStyle=`rgba(0,0,0,${r()*.3})`;g.fillRect(cx-10+r()*20,18+r()*40,.5+r(),.5+r())}
-  };
-}
 const SP={};
 function drawBunk(g){g.fillStyle='#14181a';g.fillRect(0,8,64,20);g.fillStyle='#3e4442';g.fillRect(2,6,60,8);g.fillStyle='#29312e';g.fillRect(16,4,46,10);g.fillStyle='rgba(0,0,0,.3)';for(let x=18;x<60;x+=8)g.fillRect(x,4,1,10);g.fillStyle='#55595a';g.fillRect(4,3,12,6);g.fillStyle='#0d1011';g.fillRect(4,24,4,4);g.fillRect(56,24,4,4)}
 function drawBed(g){g.fillStyle='#16191a';g.fillRect(2,14,4,18);g.fillRect(58,14,4,18);g.fillStyle='#4a4f4c';g.fillRect(0,12,64,6);g.fillStyle='#868b87';g.beginPath();g.moveTo(2,13);g.quadraticCurveTo(10,3,18,7);g.quadraticCurveTo(32,4,48,8);g.quadraticCurveTo(58,8,62,13);g.closePath();g.fill();
   g.fillStyle='rgba(30,34,34,.45)';for(let k=0;k<5;k++){g.beginPath();g.moveTo(8+k*11,12);g.quadraticCurveTo(12+k*11,7,16+k*11,11);g.lineTo(15+k*11,12);g.fill()}g.fillStyle='rgba(170,195,205,.28)';g.fillRect(4,9,56,1)}
+/* ================= CHARACTERS: layered procedural anatomy =================
+   Every human is built from 3D cross-sections (skull, jaw, neck, chest, waist, hips, limbs) projected for the
+   viewing angle, so a profile has a real nose, chin, back of skull and chest, not a squashed front view.
+   Two passes are drawn: COLOUR (skin, cloth, hair, folds, seams, wear) and DATA (material id + horizontal
+   surface normal), which the rasterizer uses to light skin, fabric, hair, boots and metal differently. */
+const MAT={none:0,skin:1,cloth:2,hair:3,boot:4,metal:5,eye:6};
+let CHW=96,CHH=192; // texture size; set in buildCharacters (phones and 2-core machines get a lighter 64x128 set)
+/* ---------- painter: one call draws into both passes ---------- */
+function Painter(gc,gd,k){const Q={gc,gd,k};
+  const path=(g,pts)=>{g.beginPath();g.moveTo(pts[0][0]*k,pts[0][1]*k);for(let i=1;i<pts.length;i++)g.lineTo(pts[i][0]*k,pts[i][1]*k);g.closePath()};
+  Q.poly=(pts,mat,col,o)=>{o=o||{};if(pts.length<3)return;let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;for(const p of pts){if(p[0]<x0)x0=p[0];if(p[0]>x1)x1=p[0];if(p[1]<y0)y0=p[1];if(p[1]>y1)y1=p[1]}
+    path(gc,pts);gc.fillStyle=col;gc.fill();
+    if(o.radial){const [rx,ry,rr]=o.radial;gc.save();path(gc,pts);gc.clip();const gr=gc.createRadialGradient(rx*k,ry*k,rr*.1*k,rx*k,ry*k,rr*k);gr.addColorStop(0,'rgba(255,248,240,.07)');gr.addColorStop(.55,'rgba(0,0,0,0)');gr.addColorStop(1,'rgba(0,0,0,.42)');gc.fillStyle=gr;gc.fillRect(x0*k-2,y0*k-2,(x1-x0)*k+4,(y1-y0)*k+4);gc.restore()}
+    const e=o.radial?0:(o.shade==null?.55:o.shade);if(e>0&&x1-x0>1.2){gc.save();path(gc,pts);gc.clip();const cxm=x0+(x1-x0)*(o.key==null?.46:o.key),gr=gc.createLinearGradient(x0*k,0,x1*k,0);
+      gr.addColorStop(0,`rgba(0,0,0,${e*.75})`);gr.addColorStop(Math.max(.05,Math.min(.95,(cxm-x0)/(x1-x0))),'rgba(0,0,0,0)');gr.addColorStop(1,`rgba(0,0,0,${e})`);gc.fillStyle=gr;gc.fillRect(x0*k-2,y0*k-2,(x1-x0)*k+4,(y1-y0)*k+4);
+      if(o.top!==false){const gv=gc.createLinearGradient(0,y0*k,0,y1*k);gv.addColorStop(0,`rgba(255,255,255,${o.top||.05})`);gv.addColorStop(.35,'rgba(0,0,0,0)');gv.addColorStop(1,`rgba(0,0,0,${o.bottom==null?.16:o.bottom})`);gc.fillStyle=gv;gc.fillRect(x0*k-2,y0*k-2,(x1-x0)*k+4,(y1-y0)*k+4)}gc.restore()}
+    if(gd&&mat){path(gd,pts);const gr=gd.createLinearGradient(x0*k,0,Math.max(x0+.5,x1)*k,0),m=mat*30;gr.addColorStop(0,`rgb(0,${m},0)`);gr.addColorStop(1,`rgb(255,${m},0)`);gd.fillStyle=gr;gd.fill()}};
+  Q.ell=(cx,cy,rx,ry,mat,col,o,rot)=>{const pts=[];for(let i=0;i<28;i++){const a=i/28*Math.PI*2,c=Math.cos(rot||0),s=Math.sin(rot||0),x=Math.cos(a)*rx,y=Math.sin(a)*ry;pts.push([cx+x*c-y*s,cy+x*s+y*c])}Q.poly(pts,mat,col,o)};
+  Q.line=(pts,col,w)=>{gc.beginPath();gc.moveTo(pts[0][0]*k,pts[0][1]*k);for(let i=1;i<pts.length;i++)gc.lineTo(pts[i][0]*k,pts[i][1]*k);gc.strokeStyle=col;gc.lineWidth=(w||.5)*k;gc.lineCap='round';gc.lineJoin='round';gc.stroke()};
+  Q.curve=(a,c,b,col,w)=>{gc.beginPath();gc.moveTo(a[0]*k,a[1]*k);gc.quadraticCurveTo(c[0]*k,c[1]*k,b[0]*k,b[1]*k);gc.strokeStyle=col;gc.lineWidth=(w||.5)*k;gc.lineCap='round';gc.stroke()};
+  Q.soft=(x,y,rx,ry,col,a)=>{gc.save();gc.translate(x*k,y*k);gc.scale(1,ry/Math.max(.01,rx));const gr=gc.createRadialGradient(0,0,0,0,0,rx*k);gr.addColorStop(0,`rgba(${col[0]},${col[1]},${col[2]},${a})`);gr.addColorStop(1,`rgba(${col[0]},${col[1]},${col[2]},0)`);gc.fillStyle=gr;gc.fillRect(-rx*k,-rx*k,rx*2*k,rx*2*k);gc.restore()};
+  Q.dot=(x,y,r,col)=>{gc.fillStyle=col;gc.beginPath();gc.arc(x*k,y*k,Math.max(.3,r*k),0,7);gc.fill()};
+  Q.rect=(x,y,w,h,col)=>{gc.fillStyle=col;gc.fillRect(x*k,y*k,w*k,h*k)};
+  Q.clipPoly=(pts,fn)=>{gc.save();path(gc,pts);gc.clip();fn();gc.restore()};
+  return Q}
+const rgb=(c,m)=>{m=m==null?1:m;return `rgb(${clamp(c[0]*m,0,255)|0},${clamp(c[1]*m,0,255)|0},${clamp(c[2]*m,0,255)|0})`};
+const rgba=(c,a,m)=>{m=m==null?1:m;return `rgba(${clamp(c[0]*m,0,255)|0},${clamp(c[1]*m,0,255)|0},${clamp(c[2]*m,0,255)|0},${a})`};
+const mixc=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];
+/* ---------- projection of cross-sections ---------- */
+const ZK=1.45; // body depth relative to the drawn widths
+function secExt(s,th){let mn=1e9,mx=-1e9;const c=Math.cos(th),sn=Math.sin(th);for(let i=0;i<24;i++){const f=i/24*Math.PI*2,x=s.a*Math.sin(f),cz=Math.cos(f),z=(cz>=0?s.bf:s.bb)*ZK*cz+(s.zc||0),xp=x*c-z*sn+(s.xc||0);if(xp<mn)mn=xp;if(xp>mx)mx=xp}return [mn,mx]}
+function secPt(s,f,th){const x=s.a*Math.sin(f),cz=Math.cos(f),z=(cz>=0?s.bf:s.bb)*ZK*cz+(s.zc||0),c=Math.cos(th),sn=Math.sin(th);return {x:x*c-z*sn+(s.xc||0),z:x*sn+z*c,vis:(x*sn+(z-(s.zc||0))*c)}}
+function secPoly(secs,th,cx){const L=[],R=[];for(const s of secs){const e=secExt(s,th);L.push([cx+e[0],s.y]);R.push([cx+e[1],s.y])}return L.concat(R.reverse())}
+/* interpolate a list of keyed sections into fine rows */
+function lerpSecs(keys,step){const out=[];for(let i=0;i<keys.length-1;i++){const A=keys[i],B=keys[i+1],n=Math.max(1,Math.ceil((B.y-A.y)/step));for(let j=0;j<n;j++){const t=j/n,u=t*t*(3-2*t);out.push({y:A.y+(B.y-A.y)*t,a:A.a+(B.a-A.a)*u,bf:A.bf+(B.bf-A.bf)*u,bb:A.bb+(B.bb-A.bb)*u,zc:(A.zc||0)+((B.zc||0)-(A.zc||0))*u})}}out.push(keys[keys.length-1]);return out}
+/* ---------- the figure ---------- */
+function drawFigure(Q,d,th,fr,ex){ex=ex||d.expr||{};const cx=48+(fr&&fr.sx||0),T=192-d.y0,Y=f=>d.y0+f*T,br=fr&&fr.breath||0,c=Math.cos(th),sn=Math.sin(th),front=c>0,side=Math.abs(sn);
+  const hu=d.hunch||0,lean=hu*.9; // forward displacement of the upper body (z), in logical px
+  const sk=d.skin,cl=d.cloth;
+  // landmarks
+  const yChin=Y(.142)+hu*.9-br*.4,yNeck=yChin+3.2,yShoulder=Y(.185)+hu*.55-br*.8,yChest=Y(.27),yWaist=Y(.395),yHip=Y(.47),yCrotch=Y(.505),yKnee=Y(.735),yAnkle=Y(.935),ySole=192;
+  const sw=d.shoulder,jk=d.jacketThick||1.6;
+  /* torso sections (body + jacket thickness) */
+  const tk=[{y:yShoulder-6,a:d.neck+1.8,bf:5,bb:5.2,zc:lean},{y:yShoulder-4.4,a:d.neck+(sw-d.neck)*.42,bf:5.8,bb:6,zc:lean},{y:yShoulder-2.6,a:sw*.78,bf:6.8,bb:6.8,zc:lean},{y:yShoulder-.6,a:sw*.92,bf:7.6,bb:7.3,zc:lean*.95},{y:yShoulder+3,a:sw-.4+jk*.4,bf:8.2+br*.3,bb:7.6,zc:lean*.9},{y:yShoulder+7,a:sw+jk*.4,bf:8.8+br*.3,bb:7.9,zc:lean*.85},{y:yChest,a:d.chest+jk*.5+br*.5,bf:9.5+(d.bust||0)+br*.4,bb:8,zc:lean*.6},
+    {y:yWaist,a:d.waist+jk*.4,bf:8.5+(d.belly||0),bb:7.5,zc:lean*.2},{y:yHip,a:d.hip+jk*.4,bf:8.5,bb:8.8,zc:0}];
+  const hem=Y(d.hem||.5);
+  // legs
+  const legOff=d.hip*.45,stance=(fr&&fr.weight)||0;
+  const leg=(sd)=>{const fx=secPt({a:legOff,bf:.5,bb:.5},sd*Math.PI/2,th),zf=fx.z,st=(sd<0?1.2:-.6)*side; // near leg a little forward in profile
+    const ox=cx+fx.x-st*sn+stance*sd*.3;const kneeFwd=-1.2*sn*0;
+    const rr=[[yCrotch-5,d.thigh*1.08],[yCrotch+6,d.thigh],[yKnee-6,d.thigh*.8],[yKnee,d.thigh*.72],[yKnee+3,d.thigh*.74],[yKnee+11,d.calf*1.05],[yAnkle-9,d.calf*.82],[yAnkle-2,d.ankle*1.15],[yAnkle,d.ankle*1.2]];
+    const L=[],R=[];for(const [y,r] of rr){const curve=(y>yKnee?-.5:.5)*sn;L.push([ox-r+curve,y]);R.push([ox+r+curve,y])}
+    const pts=L.concat(R.reverse());return {z:zf,draw:()=>{
+      Q.poly(pts,MAT.cloth,rgb(cl.trousers),{shade:.6});
+      // trouser details: knee crease, ankle stacking, seam
+      Q.curve([ox-d.thigh*.5,yKnee-2],[ox,yKnee+1.2],[ox+d.thigh*.5,yKnee-1.5],rgba([0,0,0],.32),.6);
+      for(let k=0;k<3;k++)Q.curve([ox-d.ankle-1,yAnkle-3-k*3.2],[ox,yAnkle-1.5-k*3.2+(k%2?1:-.5)],[ox+d.ankle+1,yAnkle-3.5-k*3.2],rgba([0,0,0],.28),.5);
+      Q.line([[ox+(front?d.thigh*.55:0)*sd*c,yCrotch],[ox+d.calf*.5*sd*c,yAnkle]],rgba([255,255,255],.05),.5);
+      if(d.cargo&&front)Q.poly([[ox+sd*d.thigh*.35-3,yCrotch+12],[ox+sd*d.thigh*.35+3,yCrotch+12],[ox+sd*d.thigh*.35+3.2,yCrotch+22],[ox+sd*d.thigh*.35-3.2,yCrotch+22]],MAT.cloth,rgb(cl.trousers,.82),{shade:.3});
+      // boot
+      const toe=-sn*6.5,bt=[[ox-d.ankle-1.6,yAnkle-4],[ox+d.ankle+1.6,yAnkle-4],[ox+d.ankle+2.2+Math.max(0,toe)*.9,ySole-3],[ox+d.ankle+1+Math.max(0,toe),ySole],[ox-d.ankle-1+Math.min(0,toe),ySole],[ox-d.ankle-2.2+Math.min(0,toe)*.9,ySole-3]];
+      Q.poly(bt,MAT.boot,rgb(cl.boots),{shade:.5,top:.08});
+      Q.rect(ox-d.ankle-2.4+Math.min(0,toe),ySole-1.6,d.ankle*2+4.8+Math.abs(toe),1.6,rgb(cl.boots,.55));
+      Q.line([[ox-d.ankle-1.4,yAnkle-1],[ox+d.ankle+1.4,yAnkle-1]],rgba([0,0,0],.5),.7);
+      for(let k=0;k<3;k++)Q.line([[ox-1.6+toe*.15,yAnkle+1+k*2.6],[ox+1.6+toe*.15,yAnkle+2+k*2.6]],rgba([170,170,160],.18),.4);
+      Q.dot(ox+toe*.6,ySole-4.5,1.2,rgba([200,205,200],.08))}}};
+  // arms
+  const arm=(sd)=>{const j=secPt({a:sw-3.2,bf:1,bb:1,zc:lean*.9},sd*Math.PI/2,th),jx=cx+j.x,jy=yShoulder+2.2;
+    const out=((d.armOut||1.6)+1.6)*sd*c,fwd=d.armFwd||1.8;const pk=d.pockets&&front;
+    const ey=Y(.40)-br*.3,wy=pk?Y(.465):Y(.515),hy=Y(.575);
+    const ex2=jx+out*1.25-fwd*.9*sn+(.4*sd*c),wx=pk?cx+sd*(d.waist-1)*c-3*sn:jx+out*1.15-fwd*1.6*sn,hx=jx+out*1.0-fwd*2.2*sn;
+    const ru=d.upperArm||4.8,rf=ru*.86,rw=ru*.66;
+    const seg=(ax,ay,bx,by,ra,rb)=>{const dx=bx-ax,dy=by-ay,l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l;return [[ax+nx*ra,ay+ny*ra],[bx+nx*rb,by+ny*rb],[bx-nx*rb,by-ny*rb],[ax-nx*ra,ay-ny*ra]]};
+    return {z:j.z,draw:()=>{
+      const col=rgb(cl.jacket,j.z<-.5?.82:1);
+      Q.ell(jx,jy+1.6,ru*.92,ru*1.08,MAT.cloth,col,{shade:.55,top:.08});Q.poly(seg(jx,jy+1,ex2,ey,ru,rf),MAT.cloth,col,{shade:.62});
+      Q.poly(seg(ex2,ey-1,wx,wy,rf*.98,rw*1.08),MAT.cloth,col,{shade:.62});
+      Q.ell(ex2,ey,rf*1.02,2.6,MAT.cloth,col,{shade:.5});
+      Q.line([[jx-sd*c*ru*.9,jy+5],[ex2-sd*c*rf*.95,ey],[wx-sd*c*rw*1.05,wy]],rgba([0,0,0],.45),.7);
+      // sleeve folds at the elbow and above the cuff
+      for(let k=0;k<3;k++)Q.curve([ex2-rf+.4,ey-3+k*2.2],[ex2,ey-1.6+k*2.2],[ex2+rf-.4,ey-3.4+k*2.2],rgba([0,0,0],.34),.55);
+      Q.curve([jx-ru*.8,jy+6],[jx,jy+8],[jx+ru*.8,jy+5.5],rgba([0,0,0],.22),.5);
+      if(d.strips)Q.poly(seg(jx+(ex2-jx)*.45,jy+(ey-jy)*.45,jx+(ex2-jx)*.6,jy+(ey-jy)*.6,ru*1.01,ru*.98),MAT.metal,rgb(d.strips),{shade:.3});
+      if(pk){Q.ell(wx,wy+1,rw*1.3,2,MAT.cloth,rgb(cl.jacket,.6),{shade:.3});return}
+      // cuff, then the thermal layer peeking out, then the hand
+      Q.poly(seg(wx,wy-2.2,wx+(hx-wx)*.06,wy+.8,rw*1.12,rw*1.12),MAT.cloth,rgb(cl.jacket,.72),{shade:.4});
+      if(cl.thermal)Q.rect(wx-rw*.8,wy+.6,rw*1.6,1.1,rgb(cl.thermal));
+      const hw=2.9,hl=hy-wy-1.2,hxx=wx+(hx-wx)*.5,hand=[[wx-hw,wy+1.2],[wx+hw,wy+1.2],[hxx+hw*.9,wy+1.2+hl*.6],[hx+hw*.6,wy+1.2+hl],[hx-hw*.7,wy+1.2+hl],[hxx-hw*1.05,wy+1.2+hl*.55]];
+      Q.poly(hand,MAT.skin,rgb(sk,.92),{shade:.5});
+      for(let k=0;k<3;k++){const fx=hx-hw*.5+k*hw*.5;Q.line([[fx,wy+1.2+hl*.55],[fx+(hx-wx)*.05,wy+1.2+hl*.97]],rgba([0,0,0],.28),.35)}
+      Q.curve([wx-hw*sd*c*.6-sn*1.5,wy+2],[wx-hw*1.2*sd*c-sn*2.4,wy+4.5],[wx-hw*.8*sd*c-sn*2,wy+6.5],rgba([0,0,0],.3),.5); // thumb
+      Q.line([[wx-hw+.4,wy+2.4],[wx+hw-.4,wy+2.4]],rgba([0,0,0],.18),.35);
+      if(d.ring&&sd===-1)Q.rect(hx-hw*.2-.6,wy+1.2+hl*.6,1.6,.9,'#b49a5e')}}};
+  /* ---------- draw order ---------- */
+  const legs=[leg(-1),leg(1)].sort((a,b)=>a.z-b.z),arms=[arm(-1),arm(1)].sort((a,b)=>a.z-b.z);
+  // long hair behind the body when facing us
+  const head=headModel(Q,d,th,cx,yChin,lean,fr,ex);
+  if(front)head.backHair();
+  for(const L of legs)L.draw();
+  if(side>.35&&arms[0].z<0)arms[0].draw();
+  // torso: inner layer, then the jacket
+  const tsec=lerpSecs(tk,1.2),body=secPoly(tsec,th,cx);
+  const jacketBottom=lerpSecs([{y:yHip,a:d.hip+jk*.4,bf:8.5,bb:8.8},{y:hem,a:d.hip+jk*.4+(d.hemFlare||1.5),bf:9,bb:9.4}],1.5);
+  const jk2=secPoly(tsec.concat(jacketBottom.slice(1)),th,cx);
+  if(hem<yHip+2)Q.poly(secPoly(lerpSecs([{y:yWaist,a:d.waist,bf:8,bb:7.5},{y:yCrotch+2,a:d.hip,bf:8.5,bb:8.8}],1.5),th,cx),MAT.cloth,rgb(cl.trousers),{shade:.5});
+  Q.poly(jk2,MAT.cloth,rgb(cl.jacket),{shade:.6,top:.07,bottom:.2});
+  // jacket construction: front opening / zip, pockets, seams, wear
+  const zp=(y,f)=>{const s=tsec.reduce((b,q)=>Math.abs(q.y-y)<Math.abs(b.y-y)?q:b,tsec[0]);return secPt(s.y<=yHip?s:{...s,a:d.hip+jk*.4},f,th)};
+  if(front){
+    const open=d.open||0;
+    if(open>0){// open jacket: the sweater underneath
+      const sp=[];for(let y=yShoulder+3;y<=Math.min(hem,yHip+2);y+=2){const p=zp(y,-open),q=zp(y,open);sp.push([cx+p.x,y,cx+q.x])}
+      const pts=sp.map(s=>[s[0],s[1]]).concat(sp.slice().reverse().map(s=>[s[2],s[1]]));Q.poly(pts,MAT.cloth,rgb(cl.inner),{shade:.4});
+      if(d.knit)for(let i=0;i<sp.length;i++)for(let x=sp[i][0]+1;x<sp[i][2]-1;x+=2.2)Q.line([[x,sp[i][1]],[x+.6,sp[i][1]+1.6]],rgba([0,0,0],.18),.4);
+      Q.line(sp.map(s=>[s[0],s[1]]),rgba([0,0,0],.55),.8);Q.line(sp.map(s=>[s[2],s[1]]),rgba([0,0,0],.55),.8);
+      Q.line(sp.map(s=>[s[0]-.7,s[1]]),rgba([255,255,255],.06),.4)}
+    else{const z=[];for(let y=yShoulder+3;y<=hem-1;y+=2){const p=zp(y,d.zipOff||0);if(p.vis>0)z.push([cx+p.x,y])}if(z.length>1){Q.line(z,rgba([0,0,0],.5),.75);Q.line(z.map(q=>[q[0]+.7,q[1]]),rgba([210,215,205],.07),.4)}}
+    // pockets
+    for(const sd of [-1,1]){const pc=zp(yHip-3,sd*.75);if(pc.vis>.2&&d.hem>.47){const w=5*Math.max(.35,pc.vis/9),x=cx+pc.x,y=yHip-4;Q.poly([[x-w,y],[x+w,y],[x+w*1.05,y+7],[x-w*1.05,y+7]],MAT.cloth,rgb(cl.jacket,.88),{shade:.35});Q.line([[x-w,y],[x+w,y]],rgba([0,0,0],.5),.6)}
+      const ch=zp(yChest-3,sd*.6);if(d.chestPocket&&ch.vis>.2&&(sd===d.chestPocket)){const w=3.6*Math.max(.35,ch.vis/9),x=cx+ch.x,y=yChest-5;Q.poly([[x-w,y],[x+w,y],[x+w,y+6],[x-w,y+6]],MAT.cloth,rgb(cl.jacket,.86),{shade:.3});Q.line([[x-w,y],[x+w,y]],rgba([0,0,0],.5),.5);
+        if(d.notebook){Q.rect(x-w*.7,y-2.6,w*1.2,3,'#5a4a33');Q.line([[x+w*.6,y-4.5],[x+w*.6,y+.5]],'#8f7a4a',.6)}
+        if(d.badge){Q.rect(x-w*.8,y-3.4,w*1.6,3.2,'#b7b1a0');Q.rect(x-w*.6,y-2.6,w*.5,1.4,'#3a4048');Q.line([[x-w*.1,y-2.4],[x+w*.6,y-2.4]],'#444',.25);Q.line([[x-w*.1,y-1.6],[x+w*.5,y-1.6]],'#444',.25)}}}
+    // folds where the jacket bunches at the waist, and the hem
+    for(let k=0;k<4;k++){const p=zp(yWaist-2+k*3,(k%2?.3:-.4));if(p.vis>0)Q.curve([cx+p.x-4,yWaist-1+k*3],[cx+p.x,yWaist+1.4+k*3],[cx+p.x+4,yWaist-1.6+k*3],rgba([0,0,0],.22),.55)}
+  }
+  // side seams and back seam
+  for(const sd of [-1,1]){const pts=[];for(let y=yShoulder+4;y<hem;y+=3){const p=zp(y,sd*Math.PI/2);if(p.vis>-1)pts.push([cx+p.x,y])}if(pts.length>1)Q.line(pts,rgba([0,0,0],.28),.5)}
+  if(!front){const pts=[];for(let y=yShoulder+3;y<hem;y+=3){const p=zp(y,Math.PI);pts.push([cx+p.x,y])}Q.line(pts,rgba([0,0,0],.3),.55);Q.curve([cx+zp(yShoulder+8,Math.PI*.7).x,yShoulder+8],[cx+zp(yShoulder+10,Math.PI).x,yShoulder+10.5],[cx+zp(yShoulder+8,-Math.PI*.7).x,yShoulder+8],rgba([0,0,0],.28),.5)}
+  // hem shadow, shoulder yoke seam, worn edges
+  {const hp=secPoly([{y:hem-1.2,a:d.hip+jk*.4+(d.hemFlare||1.5),bf:9,bb:9.4},{y:hem,a:d.hip+jk*.4+(d.hemFlare||1.5),bf:9,bb:9.4}],th,cx);Q.poly(hp,0,rgba([0,0,0],.35),{shade:0})}
+  Q.curve([cx+secExt({a:sw,bf:8,bb:7.5,zc:lean*.9},th)[0]+2,yShoulder+5],[cx,yShoulder+7.5],[cx+secExt({a:sw,bf:8,bb:7.5,zc:lean*.9},th)[1]-2,yShoulder+5],rgba([0,0,0],.2),.5);
+  if(d.strips){for(const yy of [yChest+6,yWaist+4]){const L=[];for(let f=-Math.PI;f<=Math.PI;f+=.2){const p=zp(yy,f);if(p.vis>0)L.push([cx+p.x,yy+(f*f)*.06])}if(L.length>1){Q.line(L,rgb(d.strips),1.6);Q.line(L,rgba([255,255,255],.08),.5)}}}
+  // belt and tools
+  if(d.toolbelt){const L=[];for(let f=-Math.PI;f<=Math.PI;f+=.15){const p=secPt({a:d.hip+jk*.4+.3,bf:9,bb:9.2},f,th);if(p.vis>0)L.push([cx+p.x,yHip-1])}if(L.length>1){Q.line(L,'#2a2117',2.4);
+      const bk=secPt({a:d.hip+jk*.4,bf:9.3,bb:9},0,th);if(bk.vis>0){Q.poly([[cx+bk.x-1.8,yHip-2.4],[cx+bk.x+1.8,yHip-2.4],[cx+bk.x+1.8,yHip+.4],[cx+bk.x-1.8,yHip+.4]],MAT.metal,'#7c7a70',{shade:.2})}
+      for(const [f,w,h,col] of [[.9,3.2,5,'#33291c'],[-1.1,3.6,6,'#2e2419'],[2.2,2.2,7,'#3a3a36']]){const p=secPt({a:d.hip+jk*.4+.6,bf:9.4,bb:9.5},f,th);if(p.vis>-2){const m=col==='#3a3a36'?MAT.metal:MAT.boot;Q.poly([[cx+p.x-w,yHip],[cx+p.x+w,yHip],[cx+p.x+w*.9,yHip+h],[cx+p.x-w*.9,yHip+h]],m,col,{shade:.35});if(m===MAT.metal)Q.line([[cx+p.x,yHip+h],[cx+p.x,yHip+h+5]],'#5a5a54',.9)}}}}
+  else if(d.belt){const L=[];for(let f=-Math.PI;f<=Math.PI;f+=.2){const p=secPt({a:d.waist+jk*.4+.2,bf:8.8,bb:7.8},f,th);if(p.vis>0)L.push([cx+p.x,yWaist+2])}if(L.length>1)Q.line(L,'#1a1714',1.4)}
+  // neck
+  const nk=lerpSecs([{y:yChin-6,a:d.neck,bf:d.neck*.95,bb:d.neck,zc:lean+1.5},{y:yShoulder+1,a:d.neck+.8,bf:d.neck,bb:d.neck,zc:lean*.95}],1);
+  Q.poly(secPoly(nk,th,cx),MAT.skin,rgb(sk,.82),{shade:.65});
+  if(front&&!d.turtle)Q.curve([cx+secPt(nk[2],-.6,th).x,yChin+1],[cx+secPt(nk[2],0,th).x,yChin+3.5],[cx+secPt(nk[2],.6,th).x,yChin+1],rgba([0,0,0],.3),.6);
+  // collar
+  if(d.collar){const cc=d.collar,h=cc.h||5,a=d.neck+2.6+(cc.w||0),secs=lerpSecs([{y:yShoulder-h+1,a:a,bf:a*.95,bb:a,zc:lean*.95},{y:yShoulder+1.8,a:a+1.6,bf:a+1.2,bb:a+1.2,zc:lean*.9}],1);
+    Q.poly(secPoly(secs,th,cx),cc.mat||MAT.cloth,rgb(cc.col),{shade:.55,top:.08});
+    if(front&&cc.open){const p=secPt(secs[1],0,th);Q.poly([[cx+p.x-2.2,yShoulder-h+1],[cx+p.x+2.2,yShoulder-h+1],[cx+p.x,yShoulder+3]],MAT.skin,rgb(d.turtle?cl.inner:sk,.78),{shade:.3})}
+    Q.line([[cx+secExt(secs[0],th)[0]+.4,yShoulder-h+1.2],[cx+secExt(secs[0],th)[1]-.4,yShoulder-h+1.2]],rgba([255,255,255],.07),.5);
+    if(cc.fur){for(let i=0;i<26;i++){const f=-Math.PI+i/26*Math.PI*2,p=secPt(secs[0],f,th);if(p.vis<-1&&front)continue;Q.line([[cx+p.x,yShoulder-h+1.4],[cx+p.x+(Math.sin(i*7.3)*.7),yShoulder-h+.2]],rgba(cc.fur,.55,.9+.2*Math.sin(i*3.1)),.6)}}}
+  if(d.scarf){const s=d.scarf,secs=lerpSecs([{y:yChin-1,a:d.neck+2.4,bf:d.neck+2.4,bb:d.neck+2,zc:lean+1},{y:yShoulder+3,a:d.neck+4.2,bf:d.neck+3.6,bb:d.neck+3.2,zc:lean}],1);Q.poly(secPoly(secs,th,cx),MAT.cloth,rgb(s),{shade:.6});
+    for(let k=0;k<3;k++)Q.curve([cx+secExt(secs[0],th)[0],yChin+k*2],[cx,yChin+1.5+k*2],[cx+secExt(secs[0],th)[1],yChin+k*2-.4],rgba([0,0,0],.3),.5);
+    if(front){const p=secPt(secs[1],.35,th);Q.poly([[cx+p.x-2.4,yShoulder+2],[cx+p.x+2.4,yShoulder+2],[cx+p.x+2.8,yChest+8],[cx+p.x-1.8,yChest+9]],MAT.cloth,rgb(s,.9),{shade:.5})}}
+  // accessories around the neck
+  if(d.stethoscope&&front){const L=[],R=[];for(let y=yShoulder;y<yChest+4;y+=2){const p=zp(y,-.55+(y-yShoulder)*.01),q=zp(y,.55-(y-yShoulder)*.01);if(p.vis>0)L.push([cx+p.x,y]);if(q.vis>0)R.push([cx+q.x,y])}if(L.length>1)Q.line(L,'#2a2d2e',1.1);if(R.length>1)Q.line(R,'#2a2d2e',1.1);if(R.length){const e=R[R.length-1];Q.ell(e[0],e[1]+1.6,1.8,1.8,MAT.metal,'#8a8f8c',{shade:.2})}}
+  if(d.lanyard&&front){const p=zp(yShoulder+2,-.5),q=zp(yShoulder+2,.5),m=zp(yChest+2,0);Q.line([[cx+p.x,yShoulder+1],[cx+m.x,yChest+1],[cx+q.x,yShoulder+1]],'#3b4a55',.6);if(m.vis>0){Q.rect(cx+m.x-2.4,yChest+1,4.8,6,'#c9c3b2');Q.rect(cx+m.x-1.6,yChest+2,2,2.4,'#4c5258');Q.line([[cx+m.x+.8,yChest+2.6],[cx+m.x+2,yChest+2.6]],'#555',.3)}}
+  if(d.clipboard&&front){const p=zp(yChest+8,.5);Q.poly([[cx+p.x-1,yChest+1],[cx+p.x+8,yChest+2],[cx+p.x+7.5,yChest+15],[cx+p.x-1.5,yChest+14]],MAT.cloth,'#6d6450',{shade:.3});Q.rect(cx+p.x+2,yChest+.6,3,1.4,'#8a8f8c')}
+  if(d.headphones){const a=d.neck+2.2;const L=[];for(let f=-1.6;f<=1.6;f+=.2){const p=secPt({a,bf:a,bb:a,zc:lean},f,th);if(p.vis>0)L.push([cx+p.x,yShoulder-1.4+Math.cos(f)*1.5])}if(L.length>1)Q.line(L,'#202325',1.2);for(const sd of [-1,1]){const p=secPt({a:a+.5,bf:a,bb:a,zc:lean},sd*1.35,th);if(p.vis>-1)Q.ell(cx+p.x,yShoulder+.6,2.2,2.6,MAT.metal,'#2c3032',{shade:.3})}}
+  // near arm(s)
+  if(side>.35){arms[1].draw();if(arms[0].z>=0)arms[0].draw()}else{arms[0].draw();arms[1].draw()}
+  if(d.clipboard&&front&&!d.pockets){}
+  // head on top, then hair over it
+  head.draw();
+  if(!front)head.backHair();
+  // weathering: grime and lint, fewer at small sizes
+  const r=mulberry(d.seed*7+(fr&&fr.id||0));for(let i=0;i<120;i++){const x=cx-20+r()*40,y=yShoulder+r()*(ySole-yShoulder);Q.dot(x,y,.25+r()*.35,rgba(r()<.5?[0,0,0]:[200,205,195],r()*.1))}
+}
+/* ---------- the head ---------- */
+function headModel(Q,d,th,cx,yChin,lean,fr,ex){const f=d.face,c=Math.cos(th),sn=Math.sin(th),HL=(f.len||23)*1.17,yTop=yChin-HL,R=f.w*1.22;
+  const t2y=t=>yTop+t*HL,hz=lean+2.2+(d.headFwd||0); // the head sits a little forward of the neck
+  // keyed sections: crown, forehead, brow, cheek, jaw, chin
+  const keys=[{y:t2y(0),a:R*.25,bf:R*.3,bb:R*.4,zc:hz-1},{y:t2y(.08),a:R*.72,bf:R*.86,bb:R*1.0,zc:hz-1.1},{y:t2y(.22),a:R*.97,bf:R*1.06,bb:R*1.14,zc:hz-.9},
+    {y:t2y(.38),a:R*(f.temple||1),bf:R*1.12,bb:R*1.08,zc:hz-.5},{y:t2y(.52),a:R*(f.cheek||.98),bf:R*1.1,bb:R*.92,zc:hz},{y:t2y(.7),a:R*(f.jaw||.86),bf:R*1.02,bb:R*.66,zc:hz+.4},
+    {y:t2y(.86),a:R*(f.jaw||.86)*.78,bf:R*.98,bb:R*.4,zc:hz+.7},{y:t2y(.97),a:R*(f.chin||.36),bf:R*.92*(f.chinFwd||1),bb:R*.3,zc:hz+.9},{y:t2y(1),a:R*.2,bf:R*.6,bb:R*.2,zc:hz+.9}];
+  const secs=lerpSecs(keys,.5);
+  // the nose: extra forward depth on the front only
+  const nTop=.40,nBot=.66,nP=(f.noseP||2.6);
+  for(const s of secs){const t=(s.y-yTop)/HL;if(t>nTop&&t<nBot){const u=(t-nTop)/(nBot-nTop);s.nose=nP*Math.pow(u,1.4)*(u>.85?(1-u)/.15:1)}
+    if(t>.74&&t<.82)s.lip=.7*(f.lips||1)}
+  const ext=s=>{let mn=1e9,mx=-1e9;for(let i=0;i<32;i++){const ph=i/32*Math.PI*2,x=s.a*Math.sin(ph),cz=Math.cos(ph),nose=(s.nose||0)*Math.pow(Math.max(0,cz),40)+(s.lip||0)*Math.pow(Math.max(0,cz),8),z=(cz>=0?s.bf+nose:s.bb)*cz+s.zc,xp=x*c-z*sn;if(xp<mn)mn=xp;if(xp>mx)mx=xp}return [mn,mx]};
+  const outline=()=>{const L=[],R2=[];for(const s of secs){const e=ext(s);L.push([cx+e[0],s.y]);R2.push([cx+e[1],s.y])}return L.concat(R2.reverse())};
+  const sp=(t,ph,dz)=>{let s=secs[0],bd=1e9;const y=t2y(t);for(const q of secs){const dd=Math.abs(q.y-y);if(dd<bd){bd=dd;s=q}}const x=s.a*Math.sin(ph),cz=Math.cos(ph),z=(cz>=0?s.bf:s.bb)*cz+s.zc+(dz||0);return {x:cx+x*c-z*sn,y,vis:x*sn+(z-s.zc)*c,f:Math.cos(ph)*c+Math.sin(ph)*sn}}; // f: how squarely the point faces us
+  const H=d.hair,skin=d.skin,expr=ex||{};
+  const age=f.age||0,blink=fr&&fr.blink;
+  return {
+    backHair:()=>{if(!H.long)return;const len=H.long,hw=R*1.18+(H.vol||0);// hair falling behind the shoulders
+      const e=ext(secs[Math.floor(secs.length*.42)]),mid=cx+(e[0]+e[1])/2,wTop=(e[1]-e[0])/2+1.6+(H.vol||0)*.6,yb=yChin+len,top=yTop-(H.vol||0)*.6;
+      const pts=[[mid,top],[mid+wTop*.7,top+2],[mid+wTop,t2y(.2)],[mid+wTop+.6,t2y(.55)],[mid+wTop+1.6+(c<0?1.5:0),yb-4],[mid+wTop*.45,yb],[mid-wTop*.45,yb+.8],[mid-wTop-1.6-(c<0?1.5:0),yb-4],[mid-wTop-.6,t2y(.55)],[mid-wTop,t2y(.2)],[mid-wTop*.7,top+2]];
+      Q.poly(pts,MAT.hair,rgb(H.col),{shade:.7,top:.05,bottom:.3});Q.line([[mid-wTop*.2,top+3],[mid-wTop-.4,t2y(.6)],[mid-wTop-1,yb-5]],rgba(mixc(H.col,[255,255,255],.2),.12),.5);Q.line([[mid+wTop*.2,top+3],[mid+wTop+.4,t2y(.6)],[mid+wTop+1,yb-5]],rgba(mixc(H.col,[255,255,255],.2),.1),.5);
+      const r=mulberry(d.seed+3);for(let i=0;i<24;i++){const x=mid-wTop+r()*wTop*2;Q.line([[x,t2y(.35)+r()*4],[x+(r()-.5)*2,yb-2-r()*4]],rgba(r()<.5?[0,0,0]:[255,255,255],r()*.1),.4)}},
+    draw:()=>{
+      const hd=outline();
+      // ears (behind the face edge), then the head
+      for(const sd of [-1,1]){const e=sp(.5,sd*Math.PI/2*.98,0);if(e.vis>-R*.2&&!(H.coverEars&&c>-.2)){const ew=1.6+2.2*Math.abs(sn*sd>0?1:Math.abs(c))*.6,eh=HL*.2;Q.ell(e.x-sn*sd*0,e.y+1+(f.earY||0),Math.max(1,ew),eh*.55,MAT.skin,rgb(skin,.8),{shade:.55});Q.curve([e.x-ew*.3,e.y-1.6],[e.x+ew*.3*sd,e.y+1],[e.x-ew*.1,e.y+3.4],rgba([0,0,0],.3),.4)}}
+      Q.poly(hd,MAT.skin,rgb(skin),{shade:.5,key:.5,top:.06,bottom:.12});
+      // facial planes: brow ridge, eye sockets, cheekbone light, under-cheek and jaw shadow
+      const vis=c>-.15;
+      if(vis){
+        Q.clipPoly(hd,()=>{
+          const cb=f.cheekbone||.5;
+          for(const sd of [-1,1]){const ck=sp(.55,sd*.72,0),hol=sp(.68,sd*.62,0),eo=sp(.47,sd*(f.eyeSp||.42),0),tm=sp(.36,sd*1.05,0);
+            if(ck.vis>0)Q.soft(ck.x,ck.y-.5,3.4,2.4,[255,240,228],.08+.06*cb);
+            if(hol.vis>0)Q.soft(hol.x,hol.y,3.4,3.2,[20,10,8],.06+.12*cb+.06*age);
+            if(eo.vis>0)Q.soft(eo.x,eo.y-.2,3.2,2.4,[25,12,10],.22+.1*age+(expr.tired?.08:0));
+            if(tm.vis>0)Q.soft(tm.x,tm.y,2.6,3.5,[20,10,8],.12)}
+          const br=sp(.37,0,0);Q.soft(br.x,br.y,R*.7,2.2,[255,246,236],.09);
+          const ns=sp(.56,0,0);Q.soft(ns.x+sn*-1.2,ns.y,1.6,4,[255,246,236],.08);
+          const ch=sp(.94,0,0);Q.soft(ch.x,ch.y+1.6,R*.5,1.8,[20,10,8],.22);Q.soft(ch.x,ch.y-1.2,2,1.4,[255,240,228],.07);
+          const jl=sp(.9,0,0);Q.soft(jl.x,jl.y+4,R*1.1,3,[10,6,5],.35);
+          // stubble / beard
+          if(f.beard){const r=mulberry(d.seed+11);for(let i=0;i<220*f.beard;i++){const ph=(r()-.5)*2.6,t=.66+r()*.34;const q=sp(t,ph,.1);if(q.vis>.3)Q.dot(q.x,q.y,.22,rgba(H.beardCol||[30,26,22],.32+r()*.3))}}
+          // age: forehead lines, crow's feet, nasolabial folds, under-eye bags
+          if(age>0){for(let k=0;k<Math.round(age*3);k++){const a=sp(.24+k*.045,-.5,0),b=sp(.25+k*.045,0,0),e2=sp(.24+k*.045,.5,0);if(b.vis>0)Q.curve([a.x,a.y],[b.x,b.y-.6],[e2.x,e2.y],rgba([40,25,20],.12+age*.12),.32)}
+            for(const sd of [-1,1]){const n1=sp(.62,sd*.32,0),n2=sp(.78,sd*.44,0);if(n1.vis>0)Q.curve([n1.x,n1.y],[n1.x+sd*c*1.2,(n1.y+n2.y)/2],[n2.x,n2.y],rgba([40,25,20],.2+age*.2),.45);
+              const ey=sp(.5,sd*(f.eyeSp||.42),0);if(ey.vis>0){Q.curve([ey.x-1.6,ey.y+1.6],[ey.x,ey.y+2.6],[ey.x+1.6,ey.y+1.6],rgba([30,20,18],.15+age*.2),.4);
+                const ce=sp(.47,sd*(f.eyeSp+.33||.75),0);if(ce.vis>0)for(let k=0;k<2;k++)Q.line([[ce.x,ce.y-.6+k*1.1],[ce.x+sd*c*1.4,ce.y-1+k*1.6]],rgba([30,20,18],.14*age),.3)}}}
+          if(d.scar){const a=sp(.35,-.47,0),b=sp(.5,-.36,0);if(a.vis>0)Q.line([[a.x,a.y],[b.x,b.y]],rgba([215,190,180],.45),.55)}
+        });
+        // eyes
+        for(const sd of [-1,1]){const asym=sd>0?(f.asym||0):0,e=sp(.46+asym*.01,sd*(f.eyeSp||.42),.2);if(e.vis<=.4)continue;const fo=Math.max(.15,e.f),ew=(f.eyeW||2)*fo,eh=(f.eyeH||1.05)*(expr.wide?1.3:1)*(expr.tired?.8:1);
+          const y=e.y+asym*.4,gx=(expr.gaze||0)*.5*c;
+          if(blink){Q.curve([e.x-ew,y],[e.x,y+.6],[e.x+ew,y],rgba([30,18,16],.7),.55);continue}
+          Q.ell(e.x,y,ew,eh*.9,MAT.eye,rgb(mixc([150,146,138],skin,.25)),{shade:.35,top:false});
+          const ir=Math.min(ew*.62,1.05),pupil=expr.vacant?.3:.5;Q.ell(e.x+gx-sn*.4,y,ir,Math.min(eh*.95,1.05),MAT.eye,rgb(f.iris||[70,62,52]),{shade:0});Q.dot(e.x+gx-sn*.4,y,ir*pupil,'#0b0a09');
+          if(!expr.vacant)Q.dot(e.x+gx-sn*.4-ir*.35,y-ir*.35,.26,'rgba(235,240,235,.85)');
+          const lid=(expr.tired?.45:0)+(f.lid||0);Q.poly([[e.x-ew-.3,y-eh*.2],[e.x,y-eh-.5],[e.x+ew+.3,y-eh*.2],[e.x+ew+.3,y-eh-1.4],[e.x-ew-.3,y-eh-1.4]],MAT.skin,rgb(skin,.86),{shade:0});
+          if(lid>0)Q.poly([[e.x-ew-.3,y-eh-.6],[e.x+ew+.3,y-eh-.6],[e.x+ew+.3,y-eh*(1-lid*1.4)],[e.x-ew-.3,y-eh*(1-lid*1.4)]],MAT.skin,rgb(skin,.8),{shade:0});
+          Q.curve([e.x-ew-.3,y-eh*.1],[e.x,y-eh-.5+lid*.8],[e.x+ew+.3,y-eh*.1],rgba([20,12,10],.85),.5);
+          Q.curve([e.x-ew,y+eh*.4],[e.x,y+eh*.95],[e.x+ew,y+eh*.4],rgba([60,40,35],.35),.35);
+          // brow
+          const bw=(f.brow||1),bi=(expr.concern?1.1:0)-(expr.disturb?.6:0),bo=expr.disturb?-.2:0,b1=sp(.39-(f.browY||0),sd*((f.eyeSp||.42)-.28),0),b2=sp(.37-(f.browY||0)-(f.browArch||0)*.02,sd*(f.eyeSp||.42),0),b3=sp(.4-(f.browY||0),sd*((f.eyeSp||.42)+.3),0);
+          const ar=(f.browArch||.4)*.35,bc=H.browCol||H.col;Q.line([[b1.x,b1.y+.3-bi*.7],[b2.x,b2.y-ar-bo]],rgba(bc,.72),.42+.32*bw);Q.line([[b2.x,b2.y-ar-bo],[b3.x,b3.y+.7]],rgba(bc,.6),.3+.22*bw);Q.soft((b1.x+b2.x)/2,(b1.y+b2.y)/2+.4,Math.abs(b2.x-b1.x)*.7+.5,1,[20,12,10],.12)}
+        // nose: bridge, shadow side, tip and nostrils
+        const nb=sp(.44,0,0),nt=sp(.63,0,nP*.95),nl=sp(.66,-.24,0),nr=sp(.66,.24,0);
+        if(nt.vis>0||Math.abs(sn)>.2){Q.line([[nb.x+.4*sn,nb.y],[nt.x-.2,nt.y-1]],rgba([0,0,0],.12+.2*Math.abs(sn)),.6+(f.noseW||1)*.5);
+          Q.line([[nb.x-.7*(c>0?1:-1)*0+.7,nb.y+1],[nt.x+.7,nt.y-1.2]],rgba([255,240,225],.07),.5);
+          Q.soft(nt.x,nt.y-.3,(f.noseW||1.4)*Math.max(.6,Math.abs(c))+.6,1.6,[255,238,225],.1);Q.soft(nt.x,nt.y+1.2,(f.noseW||1.4)+1,1,[20,10,8],.25);
+          for(const q of [nl,nr])if(q.vis>0)Q.soft(q.x,q.y,.9,.55,[25,12,10],.55);
+          Q.curve([nl.x-.8,nl.y+.2],[nt.x,nt.y+1.4],[nr.x+.8,nr.y+.2],rgba([0,0,0],.22),.45)}
+        // mouth: philtrum, upper and lower lip, corners
+        const mo=sp(.78,0,.3),ml=sp(.78,-.38*(f.mouthW||1),0),mr=sp(.78,.38*(f.mouthW||1),0),dn=(expr.down||0)+(f.down||0),op=expr.open||0;
+        if(mo.vis>0){const ph=sp(.71,0,.4);Q.line([[ph.x,ph.y],[mo.x,mo.y-1]],rgba([0,0,0],.1),.6);
+          const lw=Math.abs(mr.x-ml.x)/2;Q.soft(mo.x,mo.y-.5,lw*.95,.8*(f.lips||1),[110,62,60],.32);Q.soft(mo.x,mo.y+1,lw*.8,1*(f.lips||1),[150,95,88],.28);Q.soft(mo.x,mo.y+1.2,lw*.4,.5,[255,235,225],.08);
+          Q.curve([ml.x,ml.y+dn*.4],[mo.x,mo.y+.35+op*.6],[mr.x,mr.y+dn*.4],rgba([30,14,12],.7),.45);
+          if(op>.2)Q.ell(mo.x,mo.y+.6+op*.4,1.2*Math.abs(c)+.3,op*.45,0,'rgba(15,8,8,.85)',{shade:0});
+          Q.ell(mo.x,mo.y+2.3,1.6*Math.abs(c)+.3,.6,0,rgba([0,0,0],.12),{shade:0})}
+      }
+      // hair over the head
+      hairCap(Q,d,secs,sp,ext,cx,th,t2y,R,HL,yTop);
+      if(d.glasses&&vis){const L=sp(.46,-(f.eyeSp||.42),1.4),Rr=sp(.46,f.eyeSp||.42,1.4),wL=2.8*Math.max(.25,L.f),wR=2.8*Math.max(.25,Rr.f);
+        if(L.vis>0){gcRing(Q,L.x,L.y,wL,2.1)}if(Rr.vis>0){gcRing(Q,Rr.x,Rr.y,wR,2.1)}if(L.vis>0&&Rr.vis>0)Q.line([[L.x+wL,L.y-.3],[Rr.x-wR,Rr.y-.3]],'#9a9c94',.45);
+        const tl=sp(.46,-1.2,0),tr=sp(.46,1.2,0);if(L.vis>0&&tl.vis>-3)Q.line([[L.x-wL,L.y-.3],[tl.x,tl.y-.5]],'#8a8c84',.4);if(Rr.vis>0&&tr.vis>-3)Q.line([[Rr.x+wR,Rr.y-.3],[tr.x,tr.y-.5]],'#8a8c84',.4)}
+      if(d.pencil){const e=sp(.5,1.45,0);if(e.vis>-2)Q.line([[e.x-1,e.y-4],[e.x+1.5,e.y+1]],'#a88c48',.8)}
+    }}}
+function gcRing(Q,x,y,w,h){Q.poly([[x-w,y-h*.55],[x+w,y-h*.55],[x+w,y+h*.6],[x-w,y+h*.6]],MAT.eye,'rgba(150,170,175,.18)',{shade:0});Q.line([[x-w,y-h*.55],[x+w,y-h*.55],[x+w,y+h*.6],[x-w,y+h*.6],[x-w,y-h*.55]],'#9fa29a',.45);}
+/* hair: a cap over the skull with a hairline that recedes at the temples, then the style on top */
+function hairCap(Q,d,secs,sp,ext,cx,th,t2y,R,HL,yTop){const H=d.hair,c=Math.cos(th),sn=Math.sin(th),col=H.col;if(!H.style)return;
+  const vol=H.vol||.8,hl=H.line||.2,rec=H.recede||0;
+  // hairline height (in head t) for an angle around the head: forehead, temples, above the ear, nape
+  const lineT=ph=>{const a=Math.abs(((ph+Math.PI)%(2*Math.PI)+2*Math.PI)%(2*Math.PI)-Math.PI);if(a<.35)return hl;if(a<.9)return hl+(a-.35)/.55*(.08+rec*.12)*(a<.6?1:1)-rec*.0;if(a<1.6)return hl+.1+rec*.1+(a-.9)/.7*(.28-rec*.05);return .4+(a-1.6)/1.54*(H.nape||.34)};
+  // sample the surface: every (t, ph) cell above the hairline becomes hair
+  const cells=[];for(let i=0;i<=40;i++){const ph=-Math.PI+i/40*Math.PI*2,lt=lineT(ph);for(let t=0;t<=lt;t+=.025){const q=sp(t,ph,vol*(1-t*.5)+(t<.08?.6:0));if(q.vis>-.2)cells.push([q.x,q.y,q.vis,ph,t])}}
+  // fill: per column, the topmost to lowest hair point, as thin strips
+  const cols={};for(const p of cells){const k=Math.round(p[0]*2);(cols[k]=cols[k]||[]).push(p)}
+  const ks=Object.keys(cols).map(Number).sort((a,b)=>a-b);if(!ks.length)return;
+  const top=[],bot=[];for(const k of ks){const L=cols[k];let mn=1e9,mx=-1e9;for(const p of L){if(p[1]<mn)mn=p[1];if(p[1]>mx)mx=p[1]}top.push([k/2,mn-vol*.6]);bot.push([k/2,mx])}
+  const shape=top.concat(bot.reverse());Q.poly(shape,MAT.hair,rgb(col),{shade:.6,top:.05,bottom:.1});
+  // strands and highlights, greying
+  const r=mulberry(d.seed+21);Q.clipPoly(shape,()=>{for(let i=0;i<40;i++){const p=cells[(r()*cells.length)|0];const q=sp(Math.min(p[4]+.06,lineT(p[3])-.02),p[3]+(r()-.5)*.1,vol);Q.line([[p[0],p[1]],[q.x,q.y]],rgba(r()<.6?[0,0,0]:mixc(col,[255,255,255],.22),.08+r()*.1),.25)}
+    if(H.grey){for(let i=0;i<90*H.grey;i++){const p=cells[(r()*cells.length)|0];Q.dot(p[0]+(r()-.5),p[1]+(r()-.5),.3,rgba([150,150,145],.35))}}});
+  if(c>.1){const f0=sp(hl+.015,0,vol*.5);Q.soft(f0.x,f0.y,R*.9*c+1,1.6,col,.35)}
+  // styles
+  if(H.fringe&&c>0){const a=sp(hl,-.5,vol),b=sp(hl+.07,0,vol+.3),e=sp(hl,.6,vol);Q.poly([[a.x,a.y-2],[e.x,e.y-2],[e.x,e.y+1.2],[b.x,b.y+.6],[a.x,a.y+1.8]],MAT.hair,rgb(col,.95),{shade:.4})}
+  if(H.part&&c>.2){const a=sp(.02,H.part,vol),b=sp(hl,H.part,vol);Q.line([[a.x,a.y],[b.x,b.y]],rgba([0,0,0],.4),.45)}
+  if(H.side&&H.sideLocks){for(const sd of [-1,1]){const t0=sp(.3,sd*1.25,vol+.6),t1=sp(.3,sd*1.7,vol+.6);if(t0.vis<-2&&t1.vis<-2)continue;const x=(t0.vis>t1.vis?t0:t1).x,yb=yTop+HL+(H.side||0);
+      Q.poly([[x-2.4,t2y(.3)],[x+2.4,t2y(.3)],[x+2.8+sd*c*.8,yb],[x-2.4+sd*c*.8,yb+1]],MAT.hair,rgb(col,.92),{shade:.5})}}
+  if(H.messy){const r2=mulberry(d.seed+5);for(let i=0;i<9;i++){const p=cells[(r2()*cells.length)|0];if(p[4]>.15)continue;Q.line([[p[0],p[1]],[p[0]+(r2()-.5)*3,p[1]-1.5-r2()*1.5]],rgb(col,.9),.6)}}
+  if(H.bun&&c<.6){const q=sp(.3,Math.PI,vol+2.6);if(q.vis<0||c<0)Q.ell(q.x,q.y,3,2.8,MAT.hair,rgb(col),{shade:.5})}
+}
+/* ---------- the cast, from what the story says about each of them ---------- */
+const CHARDEF={
+ helena:{seed:40,y0:9,shoulder:20.8,chest:17.94,waist:14.73,hip:17.11,bust:1.44,neck:4.37,thigh:8.32,calf:6.12,ankle:3.58,upperArm:5.25,armOut:.9,armFwd:2.4,hem:.6,hemFlare:2,jacketThick:2,
+   skin:[148,136,126],cloth:{jacket:[48,53,58],inner:[30,33,35],trousers:[34,37,39],boots:[20,22,23],thermal:[58,62,60]},collar:{col:[44,48,52],h:6,open:true},turtle:true,chestPocket:-1,badge:true,
+   face:{w:8.3,len:23.5,temple:.98,cheek:.97,cheekbone:.9,jaw:.8,chin:.34,chinFwd:1.04,noseP:2.4,noseW:1.1,eyeSp:.43,eyeW:2,eyeH:1,brow:.8,browArch:.7,lips:.8,mouthW:.95,age:.45,asym:.6,iris:[64,70,68],lid:.1},
+   hair:{style:1,col:[30,26,24],grey:.25,line:.16,vol:1.1,long:20,side:12,part:.35,coverEars:true,browCol:[38,32,28]},expr:{}},
+ arthur:{seed:41,y0:8,shoulder:25.22,chest:22.62,waist:19.81,hip:18.6,belly:2.08,neck:5.9,thigh:9.36,calf:7.0,ankle:4.03,upperArm:6.59,armOut:1.8,armFwd:1.6,hem:.53,hemFlare:1.6,jacketThick:2.6,open:.42,knit:true,ring:true,
+   skin:[150,126,110],cloth:{jacket:[60,62,52],inner:[86,78,62],trousers:[42,43,40],boots:[30,24,18],thermal:[90,84,70]},collar:{col:[64,58,46],h:5,w:1.2,fur:[96,86,70],open:true},headphones:true,
+   face:{w:9.7,len:24,temple:.96,cheek:1.02,cheekbone:.4,jaw:1,chin:.5,chinFwd:.98,noseP:3,noseW:1.8,eyeSp:.42,eyeW:1.9,eyeH:.85,brow:1.4,browArch:.2,browY:.01,lips:.85,mouthW:1.05,age:1,asym:.8,iris:[62,66,70],lid:.3,beard:.7,down:.5},
+   hair:{style:1,col:[84,82,78],grey:.9,line:.27,recede:1,vol:.55,nape:.32,browCol:[110,104,96],beardCol:[110,106,100]},expr:{}},
+ nikolai:{seed:42,y0:14,hunch:5,headFwd:1.5,shoulder:22.1,chest:19.24,waist:16.51,hip:16.86,neck:4.96,thigh:8.32,calf:6.25,ankle:3.7,upperArm:5.86,armOut:1.2,armFwd:3.2,hem:.73,hemFlare:2.6,jacketThick:2.8,pockets:true,
+   skin:[136,130,122],cloth:{jacket:[38,41,43],inner:[28,30,31],trousers:[30,32,33],boots:[18,19,20]},collar:{col:[36,39,41],h:7.5,w:.6},scarf:[64,42,40],glasses:true,
+   face:{w:8.4,len:24.5,temple:1.02,cheek:.88,cheekbone:.8,jaw:.82,chin:.3,chinFwd:1.06,noseP:2.9,noseW:1.2,eyeSp:.43,eyeW:1.9,eyeH:.85,brow:1.1,browArch:.3,lips:.7,mouthW:.9,age:.55,asym:.7,iris:[60,62,58],lid:.35,beard:.45,down:.2},
+   hair:{style:1,col:[26,24,22],grey:.15,line:.17,vol:1.4,messy:true,nape:.42,browCol:[28,26,24]},expr:{tired:true}},
+ june:{seed:43,y0:10,shoulder:20.28,chest:17.68,waist:14.48,hip:18.1,bust:1.68,neck:4.25,thigh:8.58,calf:6.25,ankle:3.58,upperArm:5.12,armOut:1.2,armFwd:2,hem:.5,hemFlare:1.2,jacketThick:1.8,zipOff:.1,stethoscope:true,lanyard:true,
+   skin:[158,142,128],cloth:{jacket:[86,96,90],inner:[70,86,88],trousers:[50,56,56],boots:[24,25,25],thermal:[96,104,100]},collar:{col:[80,90,84],h:4,open:true},
+   face:{w:8.3,len:22.5,temple:1,cheek:1.02,cheekbone:.5,jaw:.84,chin:.4,chinFwd:.97,noseP:2.1,noseW:1.2,eyeSp:.44,eyeW:2.2,eyeH:1.15,brow:.85,browArch:.5,lips:1.15,mouthW:1,age:.3,asym:.5,iris:[78,64,46],lid:0},
+   hair:{style:1,col:[40,30,24],line:.15,vol:1.2,long:34,side:16,part:-.25,coverEars:true,fringe:false,browCol:[44,34,28]},expr:{}},
+ samuel:{seed:44,y0:9,shoulder:23.66,chest:20.8,waist:18.29,hip:17.86,neck:5.66,thigh:9.1,calf:7.0,ankle:4.03,upperArm:6.34,armOut:1.7,armFwd:1.6,hem:.5,hemFlare:1,jacketThick:2.2,toolbelt:true,cargo:true,chestPocket:1,notebook:true,pencil:true,strips:[112,110,96],
+   skin:[134,114,98],cloth:{jacket:[82,66,40],inner:[54,50,42],trousers:[48,46,38],boots:[34,28,20],thermal:[70,66,56]},collar:{col:[76,62,38],h:5,open:true},
+   face:{w:9.1,len:23,temple:.97,cheek:1,cheekbone:.6,jaw:.95,chin:.46,chinFwd:1,noseP:2.6,noseW:1.6,eyeSp:.41,eyeW:1.8,eyeH:.9,brow:1.3,browArch:.25,lips:.9,mouthW:1,age:.5,asym:.5,iris:[70,60,44],lid:.15,beard:1},
+   hair:{style:1,col:[46,36,26],line:.2,vol:.5,nape:.3,browCol:[44,34,26],beardCol:[50,40,30]},expr:{}},
+ elias:{seed:45,y0:9,shoulder:22.62,chest:19.5,waist:16.51,hip:17.11,neck:5.07,thigh:8.58,calf:6.38,ankle:3.81,upperArm:5.86,armOut:1.4,armFwd:1.8,hem:.52,hemFlare:1.2,jacketThick:2,chestPocket:-1,badge:true,belt:true,
+   skin:[142,134,126],cloth:{jacket:[34,38,40],inner:[58,63,65],trousers:[28,31,33],boots:[18,20,21],thermal:[64,68,68]},collar:{col:[52,56,58],h:5,open:true},
+   face:{w:8.6,len:23.5,temple:.98,cheek:.94,cheekbone:.7,jaw:.86,chin:.38,chinFwd:1,noseP:2.6,noseW:1.2,eyeSp:.42,eyeW:1.9,eyeH:.95,brow:1,browArch:.35,lips:.85,mouthW:.95,age:.25,asym:.4,iris:[66,72,76],lid:.1},
+   hair:{style:1,col:[34,30,27],line:.19,vol:.9,nape:.34,part:-.4,browCol:[36,32,28]},expr:{}},
+ mara:{seed:46,y0:12,shoulder:18.98,chest:16.38,waist:13.72,hip:16.37,bust:0.96,neck:4.01,thigh:7.8,calf:5.75,ankle:3.36,upperArm:4.88,armOut:.6,armFwd:1.2,hem:.78,hemFlare:3,jacketThick:1.6,
+   skin:[178,174,168],cloth:{jacket:[132,142,145],inner:[150,156,156],trousers:[120,128,130],boots:[60,64,66],thermal:[160,165,165]},collar:{col:[140,150,152],h:4},
+   face:{w:7.9,len:22,temple:1,cheek:.96,cheekbone:.7,jaw:.8,chin:.33,chinFwd:1,noseP:2,noseW:1,eyeSp:.44,eyeW:2.1,eyeH:1.1,brow:.7,browArch:.5,lips:.9,mouthW:.9,age:0,asym:.3,iris:[60,64,60],lid:.15},
+   hair:{style:1,col:[44,36,32],line:.16,vol:1,long:44,side:24,part:.2,coverEars:true,browCol:[50,42,36]},expr:{vacant:true}}};
+/* the sleeper and the fifth bed: Elias, older, with the scar the story gives him */
+CHARDEF.older={...CHARDEF.elias,seed:47,scar:true,face:{...CHARDEF.elias.face,age:.75,lid:.05},hair:{...CHARDEF.elias.hair,grey:.35,line:.22},expr:{vacant:true}};
+/* ---------- texture building ---------- */
+const VIEWS=[0,Math.PI/4,Math.PI/2,Math.PI*3/4,Math.PI];
+const CHARV={};
+function charCanvas(d,th,fr,ex,W,Hh){const k=W/96*2,gc=mkC(W*2,Hh*2).getContext('2d',{willReadFrequently:true}),dc=mkC(W*2,Hh*2),gd=dc.getContext('2d',{willReadFrequently:true});
+  const Q=Painter(gc,gd,k);drawFigure(Q,d,th,fr,ex);return {cc:gc.canvas,dc}}
+function charTex(d,th,fr,ex){const W=CHW,Hh=CHH,{cc,dc}=charCanvas(d,th,fr,ex,W,Hh);
+  const out=mkC(W,Hh),go=out.getContext('2d',{willReadFrequently:true});go.imageSmoothingEnabled=true;go.imageSmoothingQuality='high';go.drawImage(cc,0,0,W,Hh);
+  const id=go.getImageData(0,0,W,Hh),px=id.data,dd=dc.getContext('2d',{willReadFrequently:true}).getImageData(0,0,W*2,Hh*2).data,n=new Uint8Array(W*Hh),r=mulberry(d.seed+(fr&&fr.id||0)*13);
+  const op=(x,y)=>x>=0&&y>=0&&x<W&&y<Hh&&px[(y*W+x)*4+3]>=128;
+  for(let y=0;y<Hh;y++)for(let x=0;x<W;x++){const j=(y*W+x)*4;if(px[j+3]<128){px[j+3]=0;continue}
+    // un-premultiply the anti-aliased edge so it does not go dark, then a 1-px rim to keep the silhouette legible
+    const a=px[j+3]/255;let k2=a<1?1/a:1;if(!op(x-1,y)||!op(x+1,y)||!op(x,y-1)||!op(x,y+1))k2*=.8;const nz=(r()-.5)*5;
+    px[j]=clamp(px[j]*k2+nz,0,255);px[j+1]=clamp(px[j+1]*k2+nz,0,255);px[j+2]=clamp(px[j+2]*k2+nz,0,255);px[j+3]=255;
+    const di=((y*2+1)*W*2+(x*2+1))*4;if(dd[di+3]>100){const m=Math.round(dd[di+1]/30);n[y*W+x]=(m&7)|(Math.round(dd[di]/255*31)<<3)}}
+  go.putImageData(id,0,0);const t=fromCanvas(out,null,1);t.n=n;let lv=t;for(let i=1;i<t.m.length;i++){const p=lv,q=t.m[i],nn=new Uint8Array(q.w*q.h);for(let y=0;y<q.h;y++)for(let x=0;x<q.w;x++)nn[y*q.w+x]=p.n[(y*2)*p.w+x*2];q.n=nn;lv=q}
+  return t}
+/* frames: 0 rest, 1 breathing in (shoulders up, chest wider, a small weight shift), 2 blink */
+const CFR=[{id:0},{id:1,breath:1,weight:.6,sx:.25},{id:2,blink:true}];
+function buildCharacters(){const t0=performance.now();const lite=(typeof coarse!=='undefined'&&coarse)||(navigator.hardwareConcurrency||4)<=2;CHW=lite?64:96;CHH=CHW*2;
+  for(const id of ['helena','arthur','nikolai','june','samuel','elias','mara']){const d=CHARDEF[id],views=[];
+    for(let v=0;v<5;v++){const fr=[charTex(d,VIEWS[v],CFR[0]),charTex(d,VIEWS[v],CFR[1])];if(v<=2)fr.push(charTex(d,VIEWS[v],CFR[2]));views.push(fr)}
+    CHARV[id]=views;SP[id]=views[0][0];SP['_cv_'+id]=views.flat()}
+  CHARV.loadMs=Math.round(performance.now()-t0)}
+/* view for a character standing at (x,y) facing `fa`, seen from (vx,vy): index into VIEWS and whether to mirror */
+function charSprite(id,x,y,fa,vx,vy,seed){const V=CHARV[id];if(!V)return {tex:SP[id],fl:false};
+  const to=Math.atan2(vy-y,vx-x),rel=angD(to,fa),a=Math.abs(rel),v=Math.min(4,Math.round(a/(Math.PI/4)));
+  const ph=Math.sin(TT*1.35+seed*1.7),bl=((TT+seed*2.3)%4.7)<.13;const fr=V[v];
+  return {tex:bl&&fr[2]?fr[2]:fr[ph>.2?1:0],fl:rel<0}}
+/* ---------- facing: where each person looks, and turning to you when you come close ---------- */
+const FACE={helena:Math.PI/2,helenaG:0,arthur:-.55,nikolai:-.53,june:1.03,samuelK:-2.45,samuelT:Math.PI/2};
+const NPCF={};let NPCT=0;
+function npcFacing(o){const id=o.id,base=FACE[id]??Math.PI/2;let cur=NPCF[id];if(cur==null)cur=NPCF[id]=base;
+  const dx=P.x-o.x,dy=P.y-o.y,d=Math.hypot(dx,dy),talking=D&&focusTalk===id,want=(talking||d<2.8)&&los(o.x,o.y,P.x,P.y)?Math.atan2(dy,dx):base;
+  const dt=Math.min(.1,Math.max(0,TT-(o._ft||TT)));o._ft=TT;const df=angD(want,cur);NPCF[id]=cur+clamp(df,-2.6*dt,2.6*dt);return NPCF[id]}
+let focusTalk=null;
+/* ---------- lying bodies: the sleeper, Arthur and Nikolai on the floor ---------- */
+function lyingTex(d,w,h,opts){// draw the standing figure in profile, then lay it down
+  const {cc}=charCanvas(d,-Math.PI/2,{id:9},d.expr,192,384);
+  const scale=opts.scale||1,k=4,c=mkC(w*k,h*k),g=c.getContext('2d',{willReadFrequently:true});
+  if(opts.under)opts.under(g,k);if(opts.pillow){g.fillStyle='#6a6e68';g.beginPath();g.ellipse(9*k,8.2*k,7*k,2.6*k,0,0,7);g.fill();g.fillStyle='rgba(0,0,0,.25)';g.fillRect(3*k,9.6*k,12*k,.8*k)}
+  g.save();g.translate(opts.x*k,opts.y*k);g.rotate(opts.rot);const fh=opts.len*k,fw=fh/2;g.drawImage(cc,-fw/2,-fh/2,fw,fh);g.restore();
+  if(opts.over)opts.over(g,k);
+  const out=mkC(w*2,h*2),go=out.getContext('2d',{willReadFrequently:true});go.imageSmoothingEnabled=true;go.imageSmoothingQuality='high';go.drawImage(c,0,0,w*2,h*2);
+  const id=go.getImageData(0,0,w*2,h*2),px=id.data;for(let i=0;i<px.length;i+=4){if(px[i+3]<128){px[i+3]=0;continue}const a=px[i+3]/255;px[i]=Math.min(255,px[i]/a);px[i+1]=Math.min(255,px[i+1]/a);px[i+2]=Math.min(255,px[i+2]/a);px[i+3]=255}
+  go.putImageData(id,0,0);return fromCanvas(out,null,1)}
+function buildLying(){
+  // the sleeper: on his back in my bunk, blanket to the chest, eyes open
+  SP.sleeper=lyingTex(CHARDEF.older,64,28,{x:34,y:8.2,rot:-Math.PI/2,len:62,
+    under:(g,k)=>{g.save();g.scale(k,k);drawBunk(g);g.restore()},
+    over:(g,k)=>{g.save();g.scale(k,k);g.fillStyle='#2c3430';g.beginPath();g.moveTo(17,5.4);g.quadraticCurveTo(22,3.4,30,4.2);g.quadraticCurveTo(46,3.2,62,5);g.lineTo(62,14);g.lineTo(16,14);g.closePath();g.fill();
+      g.strokeStyle='rgba(0,0,0,.35)';g.lineWidth=.5;for(let x=22;x<60;x+=6){g.beginPath();g.moveTo(x,4.6);g.quadraticCurveTo(x+2,9,x+1,13.5);g.stroke()}
+      g.fillStyle='rgba(255,255,255,.06)';g.fillRect(17,4.6,45,.8);g.fillStyle='#4c504c';g.fillRect(15.5,5.2,1.4,8.6);g.restore()},
+    pillow:true});
+  // Arthur where he fell, Nikolai where he folded
+  SP.arthurLie=lyingTex({...CHARDEF.arthur,expr:{vacant:true,open:.4}},64,16,{x:32,y:8.2,rot:-Math.PI/2,len:60});
+  SP.niklie=lyingTex({...CHARDEF.nikolai,hunch:0,expr:{vacant:true}},64,16,{x:32,y:8.2,rot:-Math.PI/2,len:58,over:(g,k)=>{g.save();g.scale(k,k);g.fillStyle='#1d2021';g.fillRect(48,11,10,1.4);g.restore()}})}
+/* ---------- dialogue portraits, from the same definitions ---------- */
+const PORT={},SPK2CHAR={H:'helena',HV:'helena',A:'arthur',AR:'arthur',AB:'arthur',K:'nikolai',KR:'nikolai',KI:'nikolai',J:'june',JR:'june',S:'samuel',SR:'samuel',M:'mara',MA:'mara',E:'elias',X:'elias',XC:'elias',UE:'elias',XP:'elias'};
+const EXPR={neutral:{},concerned:{concern:true,down:.3},tired:{tired:true,down:.4},listening:{gaze:.6,open:.25},disturbed:{disturb:true,wide:true,open:.35},vacant:{vacant:true}};
+function portrait(id,ex){const key=id+'|'+ex;if(PORT[key])return PORT[key];const d=CHARDEF[id];if(!d)return null;
+  const base=d.expr||{},E2={...base,...EXPR[ex]};const W=192,Hh=384,{cc}=charCanvas(d,-.32,{id:0},E2,W,Hh);
+  const yTop=d.y0+(d.hunch||0)*.5-3,cy=yTop+20;const c=mkC(128,128),g=c.getContext('2d');const bg=g.createRadialGradient(70,40,10,64,64,110);bg.addColorStop(0,'#2a3536');bg.addColorStop(1,'#0c1112');g.fillStyle=bg;g.fillRect(0,0,128,128);
+  const sc=W*2/96,sx=(48-24)*sc,sy=(cy-22)*sc,sw=48*sc;g.imageSmoothingEnabled=true;g.drawImage(cc,sx,sy,sw,sw,0,0,128,128);
+  // cold key light from above-left, dark falloff, scanlines: the dialogue box's CRT
+  const gr=g.createLinearGradient(0,0,128,128);gr.addColorStop(0,'rgba(140,175,180,.08)');gr.addColorStop(1,'rgba(0,0,0,.32)');g.fillStyle=gr;g.fillRect(0,0,128,128);
+  const v=g.createRadialGradient(64,58,30,64,64,92);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(0,0,0,.55)');g.fillStyle=v;g.fillRect(0,0,128,128);
+  PORT[key]=c;return c}
+function exprFor(code,text){const t=text||'';if(/^(M|MA)$/.test(code))return /don't|behind/i.test(t)?'concerned':'vacant';
+  if(/!|bleed|blood|body|dead|died|knock|scream|wrong|closer|behind/i.test(t))return 'disturbed';
+  if(/\.\.\.|I don't know|sure|maybe|perhaps|why|where/i.test(t))return 'concerned';
+  if(/sleep|slept|tired|again|hours|long/i.test(t)||S.act>=4)return 'tired';
+  if(/\?$/.test(t.trim()))return 'listening';
+  return S.act>=3?'concerned':'neutral'}
+function showPortrait(code,text){const dp=$('#dport');if(!dp)return;const id=SPK2CHAR[code];if(!id||mode==='abyss'&&id!=='mara'){dp.hidden=true;$('#dialog').classList.remove('hasport');return}
+  const p=portrait(id,exprFor(code,text));if(!p){dp.hidden=true;return}const g=dp.getContext('2d');g.clearRect(0,0,128,128);g.drawImage(p,0,0);
+  if(SPK[code]&&SPK[code].radio){const im=g.getImageData(0,0,128,128),q=im.data;for(let i=0;i<q.length;i+=4){const l=(q[i]*.3+q[i+1]*.59+q[i+2]*.11)*1.1+(Math.random()-.5)*28;q[i]=l*.62;q[i+1]=l;q[i+2]=l*.6}g.putImageData(im,0,0);g.fillStyle='rgba(0,0,0,.35)';for(let y=0;y<128;y+=3)g.fillRect(0,y,128,1)}
+  dp.hidden=false;$('#dialog').classList.add('hasport')}
+
 function buildSprites(){
-  SP.helena=stex(32,64,40,person({coat:'#2c3133',face:'#6d6a64',long:true,collar:'#4c4f4c',hair:'#1b1714'}));
-  SP.arthur=stex(32,64,41,person({coat:'#2a2c27',face:'#6b645a',extra:(g,cx)=>{g.fillStyle='#4a3a24';g.fillRect(cx-8,7,3,8);g.fillRect(cx+5,7,3,8);g.fillRect(cx-6,3,12,2)}}));
-  SP.nikolai=stex(32,64,42,person({coat:'#26292b',face:'#66615a',hunch:3,extra:(g,cx,hu)=>{g.fillStyle='#8f988f';g.fillRect(cx-4,11+hu,3,1);g.fillRect(cx+1,11+hu,3,1)}}));
-  SP.june=stex(32,64,43,person({coat:'#727b77',face:'#6e6961',long:true,collar:'#2a3033',hair:'#2a1f18'}));
-  SP.samuel=stex(32,64,44,person({coat:'#523f25',face:'#69635a',extra:(g,cx)=>{g.fillStyle='#bdb7a6';g.fillRect(cx+6,30,5,7);g.fillStyle='#2a2a26';g.fillRect(cx+7,32,3,.6);g.fillRect(cx+7,34,2,.6)}}));
-  SP.elias=stex(32,64,45,person({coat:'#1e2224',face:'#5e5b55'}));
-  SP.mara=stex(32,64,46,person({coat:'#8a969a',face:'#b3b8b6',longHair:true,hair:'#3a3530'}));
+  buildCharacters();
   SP.shade=voidTex(32,72,47,(g,r)=>{g.fillStyle='#030404';g.beginPath();g.ellipse(16,9,5.5,8,0,0,7);g.fill();g.fillRect(14.5,16,3,4);g.beginPath();g.moveTo(8,20);g.quadraticCurveTo(16,17,24,20);g.lineTo(23,72);g.lineTo(9,72);g.closePath();g.fill();
     for(let i=0;i<50;i++)g.clearRect(7+r()*18,22+r()*48,1,1+r()*3)});
   SP.followerF=[0,1,2].map(f=>voidTex(48,120,700+f,(g,r)=>{g.fillStyle='#030404';const tl=[0,.34,-.26][f];
@@ -628,6 +991,7 @@ function buildSprites(){
   SP.headset=stex(16,12,66,(g)=>{g.strokeStyle='#2a2f30';g.lineWidth=2;g.beginPath();g.arc(8,9,6,Math.PI,0);g.stroke();g.fillStyle='#14181a';g.fillRect(1,7,4,5);g.fillRect(11,7,4,5)});
   SP.arthurLie=stex(64,16,67,(g)=>{g.fillStyle='#2a2c27';g.fillRect(6,6,44,8);g.fillStyle='#0d0f10';g.beginPath();g.ellipse(54,10,6,5,0,0,Math.PI*2);g.fill();g.fillStyle='#6b645a';g.fillRect(52,8,4,4);g.fillStyle='#4a3a24';g.fillRect(50,6,8,1)});
   SP.notebook=stex(16,8,59,(g)=>{g.fillStyle='#4a3d2a';g.fillRect(1,2,14,6);g.fillStyle='#c9c3b2';g.fillRect(2,3,12,1)},null,{flat:true});
+  buildLying();
 }
 /* ================= RENDERER ================= */
 const LR=new Float32Array(MW*MH),LG=new Float32Array(MW*MH),LB=new Float32Array(MW*MH);
@@ -794,7 +1158,20 @@ function RZMOD(){
             const m=md[MY[y]+MX[c]]*fl,re=ev>.7?(ev-.7)*3.3:0,vv=2+Math.min(70,re*re*(m*1.1+amb)*rk*75);
             out[y*ow+c]=(0xff000000|(((vv*1.04)|0)<<16)|((vv|0)<<8)|((vv*.9)|0))>>>0}}continue}
       const tpp=t0.w/sw,t=t0.m[Math.min(tpp>=4?2:tpp>=2?1:0,t0.m.length-1)];
-      const af=(1-fog)*al,ar=FR*af,ag=FG*af,ab=FB*af,lr=LS[0]*fog*al,lg=LS[1]*fog*al,lb=LS[2]*fog*al,em=s.em||0;
+      const af=(1-fog)*al,ar=FR*af,ag=FG*af,ab=FB*af,lr=LS[0]*fog*al,lg=LS[1]*fog*al,lb=LS[2]*fog*al,em=s.em||0,tn=t.n,flp=s.fl;
+      if(tn){/* character: light sampled either side of the body, blended by each texel's surface direction; materials respond differently to the torch */
+        const pl=Math.hypot(plX,plY)||1,rx=plX/pl*.42,ry=plY/pl*.42,k2=fog*al;sl(s.x-rx,s.y-ry);const a0=LS[0]*k2,a1=LS[1]*k2,a2=LS[2]*k2;sl(s.x+rx,s.y+ry);const b0=LS[0]*k2,b1=LS[1]*k2,b2=LS[2]*k2;
+        for(let x=xa;x<=xb;x++){const c=x-x0;if(tY>=z[c])continue;let tx=Math.min(t.w-1,((x-(scX-sw/2))/sw*t.w)|0);if(flp)tx=t.w-1-tx;
+          for(let y=ya;y<=yb;y++){const ty=Math.min(t.h-1,((y-topY)/sh*t.h)|0),ti=ty*t.w+tx,p=t.u[ti];if(!p)continue;const m=md[MY[y]+MX[c]]*fl*al,nv=tn[ti];
+            if(!nv){out[y*ow+c]=shade(p,lr+m*fr+em,lg+m*fg+em*.5,lb+m*fb+em*.3,ar,ag,ab);continue}
+            let nx=(nv>>3)*.0645-1;if(flp)nx=-nx;const mt=nv&7,q=(nx+1)*.5,fm=.78+.22*(1-nx*nx);
+            let L0=(a0+(b0-a0)*q)*fm,L1=(a1+(b1-a1)*q)*fm,L2=(a2+(b2-a2)*q)*fm,sp=0;
+            const tm=mt===1?.62:mt===3?.8:mt===2?.88:1;
+            if(mt===1){L0*=1.06;L2*=.92}else if(mt===2){L0*=.97;L1*=.97;L2*=.97}else if(mt===3){sp=m*10}else if(mt===4){sp=m*22}else if(mt===5){sp=m*42}else if(mt===6){sp=m*26}
+            /* soft shoulder on strong light, so a face under the torch keeps its features instead of clipping to a flat oval */
+            let r0=L0+m*fr*tm+em,r1=L1+m*fg*tm+em*.5,r2=L2+m*fb*tm+em*.3;if(r0>.95)r0=.95+(r0-.95)*.3;if(r1>.95)r1=.95+(r1-.95)*.3;if(r2>.95)r2=.95+(r2-.95)*.3;
+            out[y*ow+c]=s.black?0xff020303:shade(p,r0,r1,r2,ar+sp,ag+sp,ab+sp*1.05)}}
+        continue}
       for(let x=xa;x<=xb;x++){const c=x-x0;if(tY>=z[c])continue;const tx=Math.min(t.w-1,((x-(scX-sw/2))/sw*t.w)|0);
         for(let y=ya;y<=yb;y++){const ty=Math.min(t.h-1,((y-topY)/sh*t.h)|0),p=t.u[ty*t.w+tx];if(!p)continue;const m=md[MY[y]+MX[c]]*fl*al;
           out[y*ow+c]=s.black?0xff020303:shade(p,lr+m*fr+em,lg+m*fg+em*.5,lb+m*fb+em*.3,ar,ag,ab)}}
@@ -834,7 +1211,7 @@ function buildFrame(T,cam,opt){updateTables();const fa=QP[GX.q].fog,lk=opt.lk||0
     ghost:(lk>=2&&MAP[11*MW+12]===0)?11*MW+12:-1,flash:opt.flash||0,fogK:(opt.fog||.013)*(1+lk*.12),fr:FOGC[0]*fa,fg:FOGC[1]*fa,fb:FOGC[2]*fa,emg:EMG,
     ox:T.ox||0,oy:T.oy||0,shadows:!!opt.shadows,spr:null,dust:null,dn:0,fx:null,big:false};
   const list=opt.sprites;for(const s of list){const dx=s.x-cam.x,dy=s.y-cam.y;s._d=dx*dx+dy*dy}list.sort((a,b)=>b._d-a._d);
-  F.spr=list.map(s=>({x:s.x,y:s.y,t:s.tex.id,hgt:s.hgt,z0:s.z0||0,alpha:s.alpha==null?null:s.alpha,kind:s.kind||0,rim:s.rim,jit:s.jit,diss:s.diss,black:!!s.black,sx:s.sx||1,em:s.em||0}));
+  F.spr=list.map(s=>({x:s.x,y:s.y,t:s.tex.id,hgt:s.hgt,z0:s.z0||0,alpha:s.alpha==null?null:s.alpha,kind:s.kind||0,rim:s.rim,jit:s.jit,diss:s.diss,black:!!s.black,sx:s.sx||1,em:s.em||0,fl:s.fl?1:0}));
   if(opt.particles){F.dust=PART.d;F.dn=PART.n;F.fx=PART.fx.map(p=>({k:p.k,x:p.x,y:p.y,z:p.z,life:p.life}));F.big=GX.q==='high'||GX.q==='ultra'}
   return F}
 function renderScene(T,cam,opt){checkFAO();if(!T.R)T.R={tex:TEXLIST,AOW,MW,MH,mask:RZ.buildMask(T.w,T.h),fao:FAO};T.R.fao=FAO;
@@ -849,12 +1226,12 @@ function initWorkers(){
   if(n<1||off||!window.Worker||!window.Blob||!window.URL)return;
   try{
     const src=`const RZ=(${RZMOD.toString()})();let R=null;onmessage=e=>{const m=e.data;
-      if(m.t==='init'){R={tex:m.tex.map(t=>{const o={w:t.w,h:t.h,u:t.u,e:t.e||null};o.m=[o].concat(t.m);return o}),AOW:m.AOW,MW:m.MW,MH:m.MH,mask:null,fao:null}}
+      if(m.t==='init'){R={tex:m.tex.map(t=>{const o={w:t.w,h:t.h,u:t.u,e:t.e||null,n:t.n||null};o.m=[o].concat(t.m);return o}),AOW:m.AOW,MW:m.MW,MH:m.MH,mask:null,fao:null}}
       else if(m.t==='size'){R.mask=RZ.buildMask(m.w,m.h)}
       else if(m.t==='frame'){if(m.fao)R.fao=m.fao;const ow=m.x1-m.x0,need=ow*m.F.h*4,b=(m.buf&&m.buf.byteLength===need)?m.buf:new ArrayBuffer(need);
         RZ.rasterize(R,m.F,m.x0,m.x1,new Uint32Array(b));postMessage({t:'done',i:m.i,ep:m.ep,x0:m.x0,x1:m.x1,buf:b},[b])}};`;
     const url=URL.createObjectURL(new Blob([src],{type:'text/javascript'}));
-    const tex=TEXLIST.map(t=>({w:t.w,h:t.h,u:t.u,e:t.e||null,m:t.m.slice(1).map(l=>({w:l.w,h:l.h,u:l.u}))}));
+    const tex=TEXLIST.map(t=>({w:t.w,h:t.h,u:t.u,e:t.e||null,n:t.n||null,m:t.m.slice(1).map(l=>({w:l.w,h:l.h,u:l.u,n:l.n||null}))}));
     for(let i=0;i<n;i++){const wk=new Worker(url);wk.onmessage=onWK;wk.onerror=e=>{console.warn('Render worker failed, rendering on the main thread:',e&&e.message);WK.on=false;WK.busy=0};
       wk.postMessage({t:'init',tex,AOW,MW,MH});WK.list.push(wk)}
     WK.on=true;
@@ -1113,7 +1490,7 @@ function nextLine(){
     L.choice.forEach((c,k)=>{const b=document.createElement('button');b.textContent=c[0];b.id='ch'+k;b.onclick=e=>{e.stopPropagation();dCh.innerHTML='';const fn=c[1];const me=D;fn();if(D===me)nextLine()};dCh.appendChild(b)});
     D.choosing=true;return}
   D.choosing=false;dCh.innerHTML='';
-  const [k,text]=L;const sp=SPK[k]||SPK.N;
+  const [k,text]=L;const sp=SPK[k]||SPK.N;try{showPortrait(k,text)}catch(e){}
   dlg.hidden=false;dWho.textContent=sp.name;dWho.className='who'+(sp.radio?' radio':'');
   dTxt.className='txt'+(sp.narr?' narr':'')+(sp.radio?' radio':'');
   D.full=text;D.shown=0;D.typing=true;dTxt.textContent='';dMore.hidden=true;
@@ -1371,13 +1748,13 @@ function monitorTick(){
   let cap=`CAM ${c.id} · ${c.name} · ${CAMRW>0?'REWIND':'LIVE'}`;
   if(CAMI===3&&!f.chamber){renderStatic(cv,'CAM 04 · NO SIGNAL');$('#moncap').textContent='CAM 04 · LOWER CHAMBER · NO SIGNAL';return}
   let sprites=collectSprites(true),cam={x:c.x,y:c.y,a:c.a,hor:75};
-  if(CAMI===0){if(a===2)sprites.push({x:17.5,y:10.5,tex:SP.shade,hgt:.9,kind:1,rim:.4,diss:.15});if(a===4)sprites.push({x:9.5,y:10.5,tex:SP.elias,hgt:.85})}
-  if(CAMI===1){cam.a=Math.atan2(P.y-c.y,P.x-c.x);const inC=roomAt(P.x,P.y)==='COMMS';if(a===5&&f.helenaGone){const sx=inC?P.x:14.5,sy=inC?P.y:6,rx=-Math.sin(cam.a),ry=Math.cos(cam.a);sprites.push({x:sx,y:sy,tex:SP.elias,hgt:.8},{x:sx+rx*.6,y:sy+ry*.6,tex:SP.helena,hgt:.7});if(!inC)cam.a=Math.atan2(6-c.y,14.5-c.x)}}
+  if(CAMI===0){if(a===2)sprites.push({x:17.5,y:10.5,tex:SP.shade,hgt:.9,kind:1,rim:.4,diss:.15});if(a===4)sprites.push({x:9.5,y:10.5,tex:SP.elias,hgt:.72})}
+  if(CAMI===1){cam.a=Math.atan2(P.y-c.y,P.x-c.x);const inC=roomAt(P.x,P.y)==='COMMS';if(a===5&&f.helenaGone){const sx=inC?P.x:14.5,sy=inC?P.y:6,rx=-Math.sin(cam.a),ry=Math.cos(cam.a);sprites.push({x:sx,y:sy,tex:SP.elias,hgt:.7},{x:sx+rx*.6,y:sy+ry*.6,tex:SP.helena,hgt:.62});if(!inC)cam.a=Math.atan2(6-c.y,14.5-c.x)}}
   if(CAMI===2&&a===5){const k=Math.min(3,Math.floor(CAMAUTO/2.5));sprites.push({x:28.5,y:16-k*3.4,tex:SP.followerF[k%3],hgt:1.08,kind:1,rim:1.6,diss:.05});cap+=k>0?'  · MOTION':''}
   if(CAMI===3&&a>=4){sprites.push({x:33.4,y:7.8,tex:SP.sleeper,hgt:.36});if(!f.cam4seen)setFlag('cam4seen')}
   if(CAMI===0&&ST.on&&a>=3){sprites.push({x:clamp(28-ST.x,3,24),y:10.5,tex:SP.followerF[1],hgt:1.08,kind:1,rim:1.2,diss:.1});if(!f.remCam)setFlag('remCam')}
-  if(CAMI===1&&a===4&&CAMRW>0&&roomAt(P.x,P.y)==='COMMS'){const k=1.2-CAMRW;sprites.push({x:14.6+Math.sin(k*5)*.6,y:7.8-k*1.6,tex:SP.elias,hgt:.85})}
-  if(P.y>9&&P.y<12&&P.x<26&&CAMI===0)sprites.push({x:P.x,y:P.y,tex:SP.elias,hgt:.85});
+  if(CAMI===1&&a===4&&CAMRW>0&&roomAt(P.x,P.y)==='COMMS'){const k=1.2-CAMRW;sprites.push({x:14.6+Math.sin(k*5)*.6,y:7.8-k*1.6,tex:SP.elias,hgt:.72})}
+  if(P.y>9&&P.y<12&&P.x<26&&CAMI===0)sprites.push({x:P.x,y:P.y,tex:SP.elias,hgt:.72});
   computeLights();MON.ox=0;MON.oy=0;renderScene(MON,cam,{flash:0,sprites,fog:.02,noPut:true,shadows:true});
   const u=MON.u,w=MON.w,h=MON.h,roll=(TT*22)%(h+30)-15,rw=CAMRW>0;if(rw)CAMRW-=1/12;
   for(let y=0;y<h;y++){const band=Math.abs(y-roll)<6?1.3:1;for(let x=0;x<w;x++){const i=y*w+x,p=u[i];let l=((p&255)*.3+((p>>8)&255)*.59+((p>>16)&255)*.11)*1.75*band+Math.random()*18;if(l>255)l=255;
@@ -1870,15 +2247,15 @@ const has=f=>!!S.flags[f];
 const night=()=>S.act===1&&!!S.flags.night;
 const reelsAll=()=>has('reelA')&&has('reelJ')&&has('reelK');
 const OBJ=[
-  {id:'helena',x:8.5,y:5.3,tex:'helena',hgt:.86,name:'Helena Weiss',vis:()=>S.act<=4&&!(S.act===4&&has('finalTx'))&&!night(),use:()=>talkHelena()},
-  {id:'helenaG',x:3.4,y:10.5,tex:'helena',hgt:.86,name:'Helena Weiss',alpha:.7,vis:()=>S.act===5&&!has('helenaGone'),use:()=>ghostHelena()},
-  {id:'arthur',x:13.1,y:5.2,tex:'arthur',hgt:.84,name:'Arthur Bell',vis:()=>S.act<=3&&!night()&&!has('arthurDone'),use:()=>talkArthur()},
+  {id:'helena',x:8.5,y:5.3,tex:'helena',hgt:.72,name:'Helena Weiss',vis:()=>S.act<=4&&!(S.act===4&&has('finalTx'))&&!night(),use:()=>talkHelena()},
+  {id:'helenaG',x:3.4,y:10.5,tex:'helena',hgt:.72,name:'Helena Weiss',alpha:.7,vis:()=>S.act===5&&!has('helenaGone'),use:()=>ghostHelena()},
+  {id:'arthur',x:13.1,y:5.2,tex:'arthur',hgt:.73,name:'Arthur Bell',vis:()=>S.act<=3&&!night()&&!has('arthurDone'),use:()=>talkArthur()},
   {id:'arthurLie',x:13.6,y:6.2,tex:'arthurLie',hgt:.2,name:'Arthur',vis:()=>S.act===3&&has('arthurDead'),use:()=>say([['N','He is still warm. His eyes are open. He looks surprised, and then he does not.']])},
-  {id:'nikolai',x:20.5,y:5.1,tex:'nikolai',hgt:.82,name:'Nikolai Petrov',vis:()=>S.act<=3&&!has('nikolai')&&!night(),use:()=>talkNikolai()},
+  {id:'nikolai',x:20.5,y:5.1,tex:'nikolai',hgt:.68,name:'Nikolai Petrov',vis:()=>S.act<=3&&!has('nikolai')&&!night(),use:()=>talkNikolai()},
   {id:'niklie',x:20.6,y:5.7,tex:'niklie',hgt:.2,name:'Nikolai',vis:()=>S.act===3&&has('nikolai'),use:()=>say([['N','He is breathing, slow and shallow. His eyes are open. He is looking at something above me.']])},
-  {id:'june',x:18.6,y:13.1,tex:'june',hgt:.85,name:'June Mercer',vis:()=>S.act<=3&&!night(),use:()=>talkJune()},
-  {id:'samuelK',x:13.6,y:14.4,tex:'samuel',hgt:.84,name:'Samuel Reed',vis:()=>S.act===1&&!night(),use:()=>talkSamuel()},
-  {id:'samuelT',x:12.5,y:18.5,tex:'samuel',hgt:.84,name:'Samuel Reed',vis:()=>S.act===2||S.act===3,use:()=>talkSamuel()},
+  {id:'june',x:18.6,y:13.1,tex:'june',hgt:.7,name:'June Mercer',vis:()=>S.act<=3&&!night(),use:()=>talkJune()},
+  {id:'samuelK',x:13.6,y:14.4,tex:'samuel',hgt:.73,name:'Samuel Reed',vis:()=>S.act===1&&!night(),use:()=>talkSamuel()},
+  {id:'samuelT',x:12.5,y:18.5,tex:'samuel',hgt:.73,name:'Samuel Reed',vis:()=>S.act===2||S.act===3,use:()=>talkSamuel()},
   {id:'book',x:12.5,y:18.5,tex:'notebook',hgt:.06,name:'notebook on the floor',vis:()=>S.act===4||S.act===5,use:()=>readBook()},
   {id:'radio',x:14.5,y:4.35,tex:'radio',hgt:.55,name:'primary receiver',vis:()=>true,use:()=>useRadio()},
   {id:'monitors',x:16.6,y:6.5,tex:'monitors',hgt:.42,z0:.32,name:'security monitors',vis:()=>true,use:()=>useMonitor()},
@@ -1912,10 +2289,11 @@ const SHADES=[[10.5,10.5,a45],[22.5,10.5,a45],[28.5,13.5,a45],[17.5,18.5,a45],[2
   [3.5,9.5,()=>S.act===2&&has('photo')]];
 function collectSprites(forMonitor){
   const out=[];
-  for(const o of OBJ){if(!o.vis())continue;const fr=SP[o.tex+'F'];out.push({x:o.x,y:o.y,tex:fr?fr[((TT*2.5+o.x*3)|0)%fr.length]:SP[o.tex],hgt:o.hgt,z0:o.z0,alpha:o.alpha,ref:o})}
+  for(const o of OBJ){if(!o.vis())continue;if(CHARV[o.tex]&&FACE[o.id]!=null){const cs=charSprite(o.tex,o.x,o.y,npcFacing(o),P.x,P.y,o.x*3.1+o.y);o._cs=cs;out.push({x:o.x,y:o.y,tex:cs.tex,fl:cs.fl,hgt:o.hgt,z0:o.z0,alpha:o.alpha,ref:o});continue}
+    const fr=SP[o.tex+'F'];out.push({x:o.x,y:o.y,tex:fr?fr[((TT*2.5+o.x*3)|0)%fr.length]:SP[o.tex],hgt:o.hgt,z0:o.z0,alpha:o.alpha,ref:o})}
   const lk=forMonitor?0:LK();
-  if(lk>=1)for(const o of OBJ){if(!NPCS.has(o.id)||!o.vis())continue;if(hash(Math.floor(TT*1.3)+o.x*7)<.035*lk)out.push({x:o.x+.35,y:o.y+.2,tex:SP[o.tex],hgt:o.hgt,alpha:.3})}
-  if(lk>=2&&(S.act===4||S.act===5)){PHANT.forEach((ph,i)=>{if(!PHG[i])out.push({x:ph[0],y:ph[1],tex:SP[ph[2]],hgt:.85,alpha:.75})});out.push({x:8.4,y:7,tex:SP.table,hgt:.42})}
+  if(lk>=1)for(const o of OBJ){if(!NPCS.has(o.id)||!o.vis())continue;if(hash(Math.floor(TT*1.3)+o.x*7)<.035*lk)out.push({x:o.x+.35,y:o.y+.2,tex:o._cs?o._cs.tex:SP[o.tex],fl:o._cs&&o._cs.fl,hgt:o.hgt,alpha:.3})}
+  if(lk>=2&&(S.act===4||S.act===5)){PHANT.forEach((ph,i)=>{if(!PHG[i]){const cs=charSprite(ph[2],ph[0],ph[1],Math.atan2(P.y-ph[1],P.x-ph[0])+.6,P.x,P.y,i*5);out.push({x:ph[0],y:ph[1],tex:cs.tex,fl:cs.fl,hgt:.72,alpha:.75})}});out.push({x:8.4,y:7,tex:SP.table,hgt:.42})}
   if(!forMonitor)SHADES.forEach((p,i)=>{if(!S.shadesGone[i]&&p[2]())out.push({x:p[0],y:p[1],tex:SP.shade,hgt:.92,kind:1,rim:.55,diss:.18,jit:.4,shade:i})});
   if(ST.on){const d=ST.d||9,near=clamp((4-d)/4,0,1),fi=(hash(Math.floor(TT/2.7)+S.act*31)*3)|0;
     out.push({x:ST.x,y:ST.y,tex:SP.followerF[fi],hgt:1.08,kind:1,rim:.85,jit:(ST.seen?.35:.6)+near*2.4,diss:.08+clamp((d-4)/9,0,.6)});
@@ -2835,7 +3213,7 @@ function promptText(f){
   if(f.kind==='obj'){const o=f.o;const isP=['helena','helenaG','arthur','nikolai','june','samuelK','samuelT'].includes(o.id);const ek=keyName(BIND.use[0]);return `<kbd>${ek}</kbd> ${isP?'Talk to':o.id.startsWith('fl')||o.id==='mm'||o.id==='film'?'Take':o.id.startsWith('d_')?'Read':'Examine'} ${o.name}`}
   return `<kbd>${keyName(BIND.use[0])}</kbd> `+({4:'Read terminal',5:'Inspect ventilation grille',6:'Open hatch',7:'Open hatch',9:'Lift',10:'Lower chamber'}[f.v]||'Use');
 }
-function interact(){const f=findFocus();if(!f)return;investigated('examine');if(f.kind==='obj')f.o.use();else useTile(f.x,f.y,f.v)}
+function interact(){const f=findFocus();if(!f)return;if(f.kind==='obj'&&FACE[f.o.id]!=null)focusTalk=f.o.id;investigated('examine');if(f.kind==='obj')f.o.use();else useTile(f.x,f.y,f.v)}
 
 /* ================= UPDATE / DRAW ================= */
 /* ================= GRAPHICS SETTINGS ================= */
