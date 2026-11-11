@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <meta charset="utf-8">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -5371,8 +5372,37 @@ function chEnd(res){const G=CHS,k=G.k,T=CHT[k],x=XD();G.over=res==='w'?`${RNAME(
 
 /* ---------- the projector ---------- */
 function ytId(t){t=t.trim();let m=t.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/)([A-Za-z0-9_-]{11})/);if(m)return {v:m[1],l:(t.match(/[?&]list=([A-Za-z0-9_-]+)/)||[])[1]};m=t.match(/[?&]list=([A-Za-z0-9_-]+)/);if(m)return {l:m[1]};if(/^[A-Za-z0-9_-]{11}$/.test(t))return {v:t};return null}
-function cinPlay(o){const scr=$('#cinScr');if(!scr)return;const src=o.v?`https://www.youtube-nocookie.com/embed/${o.v}?autoplay=1&rel=0${o.l?'&list='+o.l:''}`:`https://www.youtube-nocookie.com/embed/videoseries?list=${o.l}&autoplay=1`;
-  scr.innerHTML=`<iframe src="${src}" title="Projector" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;S.flags.cinema=1;try{badge('matinee')}catch(e){}if(AU.ctx){ramp('station',.12,.6);ramp('lis',0,.6)}}
+
+    function cinPlay(o) {
+        const scr = $('#cinScr');
+        if (!scr) return;
+
+        const src = o.v
+            ? `https://www.youtube-nocookie.com/embed/${o.v}?autoplay=1&rel=0${o.l ? '&list=' + o.l : ''}`
+            : `https://www.youtube-nocookie.com/embed/videoseries?list=${o.l}&autoplay=1`;
+
+        const iframe = document.createElement('iframe');
+
+        iframe.src = src;
+        iframe.title = 'Projector';
+        iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+        iframe.allowFullscreen = true;
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+
+        scr.replaceChildren(iframe);
+
+        S.flags.cinema = 1;
+
+        try {
+            badge('matinee');
+        } catch (e) {}
+
+        if (AU.ctx) {
+            ramp('station', .12, .6);
+            ramp('lis', 0, .6);
+        }
+    }
+
 async function cinSearch(q){const res=$('#cinRes'),key=UI.ytkey;if(!res)return;
   if(!navigator.onLine){res.innerHTML='<div class="hint">No connection. The projector shows the test card.</div>';return}
   if(!key){res.innerHTML=`<div class="hint" style="grid-column:1/-1">The projector plays any YouTube link you paste. To search by name from here it needs a YouTube Data API key (free from Google): <input id="cinKey" placeholder="paste API key" style="width:220px"> <button id="cinKeyOk">Save</button><br>Or <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(q)}" target="_blank" rel="noopener">open the search on YouTube</a>, copy the link of what you want, and paste it above.</div>`;
