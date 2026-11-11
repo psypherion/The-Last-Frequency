@@ -1,0 +1,20 @@
+The Last Frequency · static site for https://psypherion.github.io/The-Last-Frequency/
+
+Upload EVERYTHING in this folder to the root of the repository (replace the old files):
+  index.html              the game
+  sw.js                   offline cache; makes repeat visits instant and the game playable with no connection
+  manifest.webmanifest    lets phones and desktops install the game as an app
+  logo.webp, logo.png     title banner (webp) and link-preview image (png)
+  icon.png, icon-192.png, icon-512.png, icon-180.png
+  404.html, robots.txt, .nojekyll
+  voices.js, voices-narration.js   (optional, from the voice kit; put them here too)
+
+The rec-room projector plays YouTube only when the game is served from a web address (GitHub Pages is fine).
+Opened as a file from disk, or inside a preview frame, YouTube refuses to play; everything else works.
+
+The site works from any folder on any static host (Netlify, Cloudflare Pages, itch.io HTML upload): all paths are relative.
+After uploading a new version, a returning player gets it on the visit after their next one (the first visit
+downloads it in the background); sw.js carries a version stamp that changes
+whenever the game changes, so old copies are dropped automatically. Upload sw.js together with index.html every time.
+
+last-frequency.html (sent separately) is the same game as one self-contained file for offline play by double-click.
