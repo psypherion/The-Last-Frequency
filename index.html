@@ -5406,8 +5406,13 @@ function ytId(t){t=t.trim();let m=t.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/sho
         }
     }
     function ytActiveKey() {
-        return (UI.ytkey && UI.ytkey.trim()) ||
-            (YT_DEFAULT_API_KEY.startsWith('PASTE_') ? '' : YT_DEFAULT_API_KEY);
+        const defaultKey = YT_DEFAULT_API_KEY.trim();
+
+        if (defaultKey && !defaultKey.startsWith('PASTE_')) {
+            return defaultKey;
+        }
+
+        return (UI.ytkey || '').trim();
     }
 async function cinSearch(q){const res=$('#cinRes'),key=ytActiveKey();if(!res)return;
   if(!navigator.onLine){res.innerHTML='<div class="hint">No connection. The projector shows the test card.</div>';return}
