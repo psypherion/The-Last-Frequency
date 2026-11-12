@@ -390,7 +390,7 @@ html.narrow #dialog .txt{font-size:21px;min-height:48px}html.narrow #keys{displa
       <h1 class="tlogo"><img id="tlogo" src="logo.webp" alt="The Last Frequency" width="2000" height="667" decoding="async"><span class="tl-text">The Last Frequency</span></h1>
       <div class="tag" id="ttag">A listening station four hundred metres under the ice is receiving a signal that remembers what has not happened yet.</div>
       <div class="btns"><button id="newgame" class="primary">Begin descent</button><button id="cont" hidden>Continue</button><button id="tctl">Controls</button><button id="tkey">Resume key</button></div>
-      <div class="help">Headphones recommended. Sound carries most of what happens here.<br><span id="helpk"></span><br>Thirteen days under the ice. Progress is kept as you go. If something follows you, keep it in sight.<br><span style="opacity:.7">Psychological horror. Grief, isolation, alcohol and drug use.</span><br><span style="opacity:.7">Psychological horror. Grief, isolation, alcohol and drug use.</span><br><span style="opacity:.7">Psychological horror. Grief, isolation, alcohol and drug use.</span><br><span style="opacity:.7">Psychological horror. Grief, isolation, alcohol and drug use.</span><br><span style="opacity:.7">Psychological horror. Grief, isolation, alcohol and drug use.</span><br><span style="opacity:.7">Psychological horror. Grief, isolation, alcohol and drug use.</span></div>
+      <div class="help">Headphones recommended. Sound carries most of what happens here.<br><span id="helpk"></span><br>Thirteen days under the ice. Progress is kept as you go. If something follows you, keep it in sight.<br><span style="opacity:.7">Psychological horror. Grief, isolation, alcohol and drug use.</span></div>
       <div class="found" id="tfound"></div>
       <div class="credit">Story and development by Sayan</div>
       <div class="gfx" id="gfxT"></div>
@@ -679,8 +679,8 @@ function secPoly(secs,th,cx){const L=[],R=[];for(const s of secs){const e=secExt
 /* interpolate a list of keyed sections into fine rows */
 function lerpSecs(keys,step){const out=[];for(let i=0;i<keys.length-1;i++){const A=keys[i],B=keys[i+1],n=Math.max(1,Math.ceil((B.y-A.y)/step));for(let j=0;j<n;j++){const t=j/n,u=t*t*(3-2*t);out.push({y:A.y+(B.y-A.y)*t,a:A.a+(B.a-A.a)*u,bf:A.bf+(B.bf-A.bf)*u,bb:A.bb+(B.bb-A.bb)*u,zc:(A.zc||0)+((B.zc||0)-(A.zc||0))*u})}}out.push(keys[keys.length-1]);return out}
 /* ---------- the figure ---------- */
-function drawFigure(Q,d,th,fr,ex){ex=ex||d.expr||{};const cx=48+(fr&&fr.sx||0),T=192-d.y0,Y=f=>d.y0+f*T,br=fr&&fr.breath||0,c=Math.cos(th),sn=Math.sin(th),front=c>0,side=Math.abs(sn);
-  const hu=d.hunch||0,lean=hu*.9; // forward displacement of the upper body (z), in logical px
+function drawFigure(Q,d,th,fr,ex){ex=ex||d.expr||{};const WK=fr&&fr.walk!=null?walkPose(d,th,fr.walk):null;const cx=48+(fr&&fr.sx||0)+(WK?WK.sway:0),T=192-d.y0,Y=f=>d.y0+f*T+(WK?WK.drop:0),br=fr&&fr.breath||0,c=Math.cos(th),sn=Math.sin(th),front=c>0,side=Math.abs(sn);
+  const hu=d.hunch||0,lean=hu*.9+(WK?1.2:0); // forward displacement of the upper body (z), in logical px
   const sk=d.skin,cl=d.cloth;
   // landmarks
   const yChin=Y(.142)+hu*.9-br*.4,yNeck=yChin+3.2,yShoulder=Y(.185)+hu*.55-br*.8,yChest=Y(.27),yWaist=Y(.395),yHip=Y(.47),yCrotch=Y(.505),yKnee=Y(.735),yAnkle=Y(.935),ySole=192;
@@ -692,28 +692,35 @@ function drawFigure(Q,d,th,fr,ex){ex=ex||d.expr||{};const cx=48+(fr&&fr.sx||0),T
   // legs
   const legOff=d.hip*.45,stance=(fr&&fr.weight)||0;
   const leg=(sd)=>{const fx=secPt({a:legOff,bf:.5,bb:.5},sd*Math.PI/2,th),zf=fx.z,st=(sd<0?1.2:-.6)*side; // near leg a little forward in profile
-    const ox=cx+fx.x-st*sn+stance*sd*.3;const kneeFwd=-1.2*sn*0;
+    const ox=cx+fx.x-st*sn+stance*sd*.3;const w=WK?WK.leg[sd]:null,yH=yCrotch-5;
+    // a point down the leg: straight when standing; when walking the thigh hangs from the hip and the shin from the knee
+    const LP=y=>{if(!w)return [ox,y];if(y<=yKnee){const u=Math.max(0,(y-yH)/(yKnee-yH));return [ox+w.kx*u,y+w.kdy*u]}const u=(y-yKnee)/(yAnkle-yKnee);return [ox+w.kx+(w.ax-w.kx)*u,y+w.kdy+(w.ady-w.kdy)*u]};
     const rr=[[yCrotch-5,d.thigh*1.08],[yCrotch+6,d.thigh],[yKnee-6,d.thigh*.8],[yKnee,d.thigh*.72],[yKnee+3,d.thigh*.74],[yKnee+11,d.calf*1.05],[yAnkle-9,d.calf*.82],[yAnkle-2,d.ankle*1.15],[yAnkle,d.ankle*1.2]];
-    const L=[],R=[];for(const [y,r] of rr){const curve=(y>yKnee?-.5:.5)*sn;L.push([ox-r+curve,y]);R.push([ox+r+curve,y])}
-    const pts=L.concat(R.reverse());return {z:zf,draw:()=>{
+    const L=[],R=[];for(const [y,r0] of rr){const curve=(y>yKnee?-.5:.5)*sn,q=LP(y),r=r0*(w?(y>yKnee?w.ss:w.ts):1);L.push([q[0]-r+curve,q[1]]);R.push([q[0]+r+curve,q[1]])}
+    const pts=L.concat(R.reverse()),K=LP(yKnee),A=LP(yAnkle),kx=K[0],ky=K[1],ax=A[0],ay=A[1],sy=ay+(ySole-yAnkle);
+    const pa=w?w.pitch*sn:0,cp=Math.cos(pa),sp=Math.sin(pa),RT=p=>pa?[ax+(p[0]-ax)*cp-(p[1]-ay)*sp,ay+(p[0]-ax)*sp+(p[1]-ay)*cp]:p;
+    return {z:zf,draw:()=>{
+      if(w)Q.ell(kx,ky,d.thigh*.76,d.thigh*.8,MAT.cloth,rgb(cl.trousers),{shade:.5});
       Q.poly(pts,MAT.cloth,rgb(cl.trousers),{shade:.6});
       // trouser details: knee crease, ankle stacking, seam
-      Q.curve([ox-d.thigh*.5,yKnee-2],[ox,yKnee+1.2],[ox+d.thigh*.5,yKnee-1.5],rgba([0,0,0],.32),.6);
-      for(let k=0;k<3;k++)Q.curve([ox-d.ankle-1,yAnkle-3-k*3.2],[ox,yAnkle-1.5-k*3.2+(k%2?1:-.5)],[ox+d.ankle+1,yAnkle-3.5-k*3.2],rgba([0,0,0],.28),.5);
-      Q.line([[ox+(front?d.thigh*.55:0)*sd*c,yCrotch],[ox+d.calf*.5*sd*c,yAnkle]],rgba([255,255,255],.05),.5);
-      if(d.cargo&&front)Q.poly([[ox+sd*d.thigh*.35-3,yCrotch+12],[ox+sd*d.thigh*.35+3,yCrotch+12],[ox+sd*d.thigh*.35+3.2,yCrotch+22],[ox+sd*d.thigh*.35-3.2,yCrotch+22]],MAT.cloth,rgb(cl.trousers,.82),{shade:.3});
+      Q.curve([kx-d.thigh*.5,ky-2],[kx,ky+1.2],[kx+d.thigh*.5,ky-1.5],rgba([0,0,0],.32),.6);
+      if(w&&w.ss>1.08)Q.curve([kx-d.thigh*.4,ky+2.5],[kx,ky+4.6],[kx+d.thigh*.4,ky+2.8],rgba([0,0,0],.26),.5); // the cloth folds behind a bent knee
+      for(let k=0;k<3;k++)Q.curve([ax-d.ankle-1,ay-3-k*3.2],[ax,ay-1.5-k*3.2+(k%2?1:-.5)],[ax+d.ankle+1,ay-3.5-k*3.2],rgba([0,0,0],.28),.5);
+      Q.line([[ox+(front?d.thigh*.55:0)*sd*c,yCrotch],[kx+d.thigh*.3*sd*c,ky],[ax+d.calf*.5*sd*c,ay]],rgba([255,255,255],.05),.5);
+      if(d.cargo&&front){const g=LP(yCrotch+17),gx=g[0]+sd*d.thigh*.35,gy=g[1]-5;Q.poly([[gx-3,gy],[gx+3,gy],[gx+3.2,gy+10],[gx-3.2,gy+10]],MAT.cloth,rgb(cl.trousers,.82),{shade:.3})}
       // boot
-      const toe=-sn*6.5,bt=[[ox-d.ankle-1.6,yAnkle-4],[ox+d.ankle+1.6,yAnkle-4],[ox+d.ankle+2.2+Math.max(0,toe)*.9,ySole-3],[ox+d.ankle+1+Math.max(0,toe),ySole],[ox-d.ankle-1+Math.min(0,toe),ySole],[ox-d.ankle-2.2+Math.min(0,toe)*.9,ySole-3]];
-      Q.poly(bt,MAT.boot,rgb(cl.boots),{shade:.5,top:.08});
-      Q.rect(ox-d.ankle-2.4+Math.min(0,toe),ySole-1.6,d.ankle*2+4.8+Math.abs(toe),1.6,rgb(cl.boots,.55));
-      Q.line([[ox-d.ankle-1.4,yAnkle-1],[ox+d.ankle+1.4,yAnkle-1]],rgba([0,0,0],.5),.7);
-      for(let k=0;k<3;k++)Q.line([[ox-1.6+toe*.15,yAnkle+1+k*2.6],[ox+1.6+toe*.15,yAnkle+2+k*2.6]],rgba([170,170,160],.18),.4);
-      Q.dot(ox+toe*.6,ySole-4.5,1.2,rgba([200,205,200],.08))}}};
+      const toe=-sn*6.5,bt=[[ax-d.ankle-1.6,ay-4],[ax+d.ankle+1.6,ay-4],[ax+d.ankle+2.2+Math.max(0,toe)*.9,sy-3],[ax+d.ankle+1+Math.max(0,toe),sy],[ax-d.ankle-1+Math.min(0,toe),sy],[ax-d.ankle-2.2+Math.min(0,toe)*.9,sy-3]];
+      Q.poly(bt.map(RT),MAT.boot,rgb(cl.boots),{shade:.5,top:.08});
+      const s0=ax-d.ankle-2.4+Math.min(0,toe),s1=s0+d.ankle*2+4.8+Math.abs(toe);
+      if(pa)Q.poly([[s0,sy-1.6],[s1,sy-1.6],[s1,sy],[s0,sy]].map(RT),MAT.boot,rgb(cl.boots,.55),{shade:0,top:false});else Q.rect(s0,sy-1.6,s1-s0,1.6,rgb(cl.boots,.55));
+      Q.line([[ax-d.ankle-1.4,ay-1],[ax+d.ankle+1.4,ay-1]].map(RT),rgba([0,0,0],.5),.7);
+      for(let k=0;k<3;k++)Q.line([[ax-1.6+toe*.15,ay+1+k*2.6],[ax+1.6+toe*.15,ay+2+k*2.6]].map(RT),rgba([170,170,160],.18),.4);
+      const dt2=RT([ax+toe*.6,sy-4.5]);Q.dot(dt2[0],dt2[1],1.2,rgba([200,205,200],.08))}}};
   // arms
   const arm=(sd)=>{const j=secPt({a:sw-3.2,bf:1,bb:1,zc:lean*.9},sd*Math.PI/2,th),jx=cx+j.x,jy=yShoulder+2.2;
-    const out=((d.armOut||1.6)+1.6)*sd*c,fwd=d.armFwd||1.8;const pk=d.pockets&&front;
-    const ey=Y(.40)-br*.3,wy=pk?Y(.465):Y(.515),hy=Y(.575);
-    const ex2=jx+out*1.25-fwd*.9*sn+(.4*sd*c),wx=pk?cx+sd*(d.waist-1)*c-3*sn:jx+out*1.15-fwd*1.6*sn,hx=jx+out*1.0-fwd*2.2*sn;
+    const out=((d.armOut||1.6)+1.6)*sd*c,fwd=d.armFwd||1.8;const pk=d.pockets&&front&&!WK,wa=WK?WK.arm[sd]:null;
+    const ey=Y(.40)-br*.3+(wa?wa.edy:0),wy=(pk?Y(.465):Y(.515))+(wa?wa.wdy:0),hy=Y(.575)+(wa?wa.hdy:0);
+    const ex2=jx+out*1.25-fwd*.9*sn+(.4*sd*c)+(wa?wa.ex:0),wx=(pk?cx+sd*(d.waist-1)*c-3*sn:jx+out*1.15-fwd*1.6*sn)+(wa?wa.wx:0),hx=jx+out*1.0-fwd*2.2*sn+(wa?wa.hx:0);
     const ru=d.upperArm||4.8,rf=ru*.86,rw=ru*.66;
     const seg=(ax,ay,bx,by,ra,rb)=>{const dx=bx-ax,dy=by-ay,l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l;return [[ax+nx*ra,ay+ny*ra],[bx+nx*rb,by+ny*rb],[bx-nx*rb,by-ny*rb],[ax-nx*ra,ay-ny*ra]]};
     return {z:j.z,draw:()=>{
@@ -1322,6 +1329,7 @@ function initWorkers(){
   try{
     const src=`const RZ=(${RZMOD.toString()})();let R=null;onmessage=e=>{const m=e.data;
       if(m.t==='init'){R={tex:m.tex.map(t=>{const o={w:t.w,h:t.h,u:t.u,e:t.e||null,n:t.n||null};o.m=[o].concat(t.m);return o}),AOW:m.AOW,MW:m.MW,MH:m.MH,mask:null,fao:null}}
+      else if(m.t==='tex'){const t=m.tex,o={w:t.w,h:t.h,u:t.u,e:t.e||null,n:t.n||null};o.m=[o].concat(t.m);R.tex[m.id]=o}
       else if(m.t==='size'){R.mask=RZ.buildMask(m.w,m.h)}
       else if(m.t==='frame'){if(m.fao)R.fao=m.fao;const ow=m.x1-m.x0,need=ow*m.F.h*4,b=(m.buf&&m.buf.byteLength===need)?m.buf:new ArrayBuffer(need);
         RZ.rasterize(R,m.F,m.x0,m.x1,new Uint32Array(b));postMessage({t:'done',i:m.i,ep:m.ep,x0:m.x0,x1:m.x1,buf:b},[b])}};`;
@@ -2456,7 +2464,7 @@ const SHADES=[[10.5,10.5,a45],[22.5,10.5,a45],[28.5,13.5,a45],[17.5,18.5,a45],[2
 function collectSprites(forMonitor){
   const out=[];
   const upP=forMonitor?false:P.x>=36.5;
-  for(const o of OBJ){if(o.dec||(o.x>=36.5)!==upP||!o.vis())continue;if(CHARV[o.tex]&&FACE[o.id]!=null){const cs=charSprite(o.tex,o.x,o.y,npcFacing(o),P.x,P.y,o.x*3.1+o.y);o._cs=cs;out.push({x:o.x,y:o.y,tex:cs.tex,fl:cs.fl,hgt:o.hgt,z0:o.z0,alpha:o.alpha,ref:o});continue}
+  for(const o of OBJ){if(o.dec||(o.x>=36.5)!==upP||!o.vis())continue;if(CHARV[o.tex]&&FACE[o.id]!=null){const cs=charSprite(o.tex,o.x,o.y,npcFacing(o),P.x,P.y,o.x*3.1+o.y,o);o._cs=cs;out.push({x:o.x,y:o.y,tex:cs.tex,fl:cs.fl,hgt:o.hgt,z0:o.z0,alpha:o.alpha,ref:o});continue}
     const fr=SP[o.tex+'F'];out.push({x:o.x,y:o.y,tex:fr?fr[((TT*2.5+o.x*3)|0)%fr.length]:SP[o.tex],hgt:o.hgt,z0:o.z0,alpha:o.alpha,add:o.add,ref:o})}
   const lk=forMonitor?0:LK();
   if(lk>=1)for(const o of OBJ){if(!NPCS.has(o.id)||!o.vis())continue;if(hash(Math.floor(TT*1.3)+o.x*7)<.035*lk)out.push({x:o.x+.35,y:o.y+.2,tex:o._cs?o._cs.tex:SP[o.tex],fl:o._cs&&o._cs.fl,hgt:o.hgt,alpha:.42,diss:.8})}
@@ -4483,10 +4491,10 @@ function npcTick(dt){if(mode!=='play'&&mode!=='abyss')return;const h=hNow();
     let tx,ty,cell=null;if(n.path.length){cell=n.path[0];tx=cell%MW+.5;ty=((cell/MW)|0)+.5}else{tx=n.goal[0];ty=n.goal[1]}
     if(cell!=null&&MAP[cell]===6){npcLastOpen=k;npcOpen(cell);o._walk=false;continue}
     if(cell!=null&&DST.has(cell)){o._walk=false;continue}
-    const dx=tx-o.x,dy=ty-o.y,d=Math.hypot(dx,dy),sp=1.15*dt;
+    const dx=tx-o.x,dy=ty-o.y,d=Math.hypot(dx,dy),sp=.95*dt;
     if(d<=sp){o.x=tx;o.y=ty;if(n.path.length)n.path.shift();else{n.arrived=true;o._walk=false;o.z0=undefined;if(n.face!=null)FACE[id]=n.face;continue}}
     else{o.x+=dx/d*sp;o.y+=dy/d*sp}
-    o._walk=true;FACE[id]=Math.atan2(dy,dx);n.ph=(n.ph||0)+dt*7.5;o.z0=Math.abs(Math.sin(n.ph))*.012;
+    o._walk=true;FACE[id]=Math.atan2(dy,dx);n.ph=(n.ph||0)+dt*9;o._wp=n.ph;o.z0=CHARW[o.tex]?0:Math.abs(Math.sin(n.ph))*.012;
     if(Math.floor(n.ph/Math.PI)!==n.st){n.st=Math.floor(n.ph/Math.PI);const dd=Math.hypot(P.x-o.x,P.y-o.y);if(dd<6&&los(P.x,P.y,o.x,o.y))noiseBurst({type:'lowpass',f:380,v:.05*(1-dd/6),d:.06,brown:true})}}}
 {const f0=npcFacing;npcFacing=function(o){if(o._walk&&!(D&&focusTalk===o.id)){NPCF[o.id]=FACE[o.id];return FACE[o.id]}return f0(o)}}
 function whereIs(k){const id=NPCOBJ[k](),o=OBJ.find(q=>q.id===id);if(!o||!o.vis())return null;const n=NPC[k]||{};return [roomAt(o.x,o.y)||'CORRIDOR',n.free&&n.act?n.act:'']}
@@ -4869,7 +4877,9 @@ setTimeout(()=>{ACTIONS.push(['log','Conversation log',['KeyL']]);if(!BIND.log)B
 {const b0=buildGfxUI;buildGfxUI=function(el){b0(el);if(!el)return;const br=document.createElement('span');br.style.flexBasis='100%';el.appendChild(br);
   const lb=document.createElement('span');lb.className='lbl';lb.textContent='INTERFACE';el.appendChild(lb);
   const mk=(label,on,fn,id)=>{const b=document.createElement('button');b.textContent=label;b.id=el.id+id;b.setAttribute('aria-pressed',on?'true':'false');b.onclick=e=>{e.stopPropagation();fn();saveUI();buildGfxUI($('#gfxT'));buildGfxUI($('#gfxP'))};el.appendChild(b)};
-  mk('Objective guide',UI.guide,()=>{UI.guide=!UI.guide},'guide');mk('Large text',UI.big,()=>{UI.big=!UI.big},'big')}}
+  mk('Objective guide',UI.guide,()=>{UI.guide=!UI.guide},'guide');mk('Large text',UI.big,()=>{UI.big=!UI.big},'big');lifeSettingsUI(el)}}
+/* brightness, sudden scares and the name row used to be added once at start, so changing any option above rebuilt the panel without them */
+{const l0=lifeSettingsUI;lifeSettingsUI=function(el){if(!el||el.querySelector('.lrow'))return;l0(el)}}
 
 /* ---------- controller ---------- */
 const PAD={on:false,prev:[],raf:0,moved:false,fi:-1};
@@ -5198,7 +5208,7 @@ function byDraw(g,w,h){const bw=w>720?w>>1:w,bh=Math.round(bw*h/w);
   BYG.putImageData(BYBUF,0,0);G.drawImage(BYC,0,0);
   /* things standing in it */
   const sp=[];const add=(x,y,c,hg,al)=>{const vx=x-px,vy=y-py,d=vx*dx+vy*dy;if(d<.25||d>22)return;sp.push({d,l:vx*-dy+vy*dx,c,hg,al:al==null?1:al})};
-  if(z===1){const fr0=CHARV.elias&&CHARV.elias[4]?CHARV.elias[4][Math.sin(BY.walk*7)>0?1:0].c:SP.elias&&SP.elias.c;if(fr0)for(const k of [-2,-1,1,2])add(px+16*k,py,fr0,.74)}
+  if(z===1){const fr0=CHARV.elias&&CHARV.elias[4]?(walkWant('elias',[4]),CHARW.elias&&CHARW.elias[4]?walkFrame('elias',4,BY.walk*7,false):CHARV.elias[4][Math.sin(BY.walk*7)>0?1:0]).c:SP.elias&&SP.elias.c;if(fr0)for(const k of [-2,-1,1,2])add(px+16*k,py,fr0,.74)}
   if(z===2)for(let j=-1;j<=1;j++)for(let i=-1;i<=1;i++){const ox=i*12,oy=j*12;add(TBL.x+ox,TBL.y+oy,SP.table.c,.42);
     for(let k=0;k<5;k++){const [sx,sy]=bySlot(k),f=BYFIG[k];add(sx+ox,sy+oy,byWhole(f[3])?SP[f[0]].c:BYSIL[f[0]],.72)}
     const [gx,gy]=bySlot(6);add(gx+ox,gy+oy,BYGLOW,.5,(BY.heard>=2||BY.zt>75)?.75+.25*Math.sin(TT*2.2):.3)}
@@ -5832,6 +5842,49 @@ MSGDB.push(['m_av00','helena','Surface is sending down a relay technician on tom
     if(o&&o.vis()&&roomAt(o.x,o.y)==='COMMS'){setFlag('anyaIntro');const here=ar&&ar.vis()&&roomAt(ar.x,ar.y)==='COMMS';
       say(here?[['A','Ah. Doctor, you haven\'t met. This is Volkov. Came down on the six o\'clock lift. Surface has finally sent me someone who can solder.'],['AV','Relay technician. I am told you are the reason the relay has something to carry.'],['A','She has already found two faults I was fond of.'],['N','She nods, once, the way people do when they have decided to look at you properly later.']]
         :[['N','There is someone at the relay rack I have not seen before. Dark hair, a surface parka still over the chair.'],['AV','Volkov. Relay. I came down this morning. You will be Voss.'],['N','She goes back to the rack. She has not asked me anything. I find that I notice.']])}}}catch(e){}return out}}
+
+/* ================= WALKING: a real gait =================
+   People used to slide across the floor in their standing pose. Each walker now has a cycle of poses:
+   the hip swings, the knee folds as the foot comes through, the heel lands and the toe pushes off,
+   the opposite arm swings from the shoulder with a bend at the elbow, and the body rises over the
+   standing leg and settles between steps. The pose is computed once per frame of the cycle and baked
+   into textures, so it costs nothing while playing. */
+const CHARW={};let WALKN=6;
+function walkPose(d,th,p){const c=Math.cos(th),sn=Math.sin(th),side=Math.abs(sn),T=192-d.y0,hu=d.hunch||0;
+  const L1=T*.23+5,L2=T*.2,pers=c*.2,W={leg:{},arm:{}};let low=-1e9;
+  for(const sd of [-1,1]){const f=p+(sd>0?Math.PI:0),sw=Math.sin(f),cs=Math.cos(f);
+    const t=.5*sw+.05,kn=.1+.8*Math.pow(Math.max(0,cs),1.2),s=t-kn;
+    const kf=L1*Math.sin(t),af=kf+L2*Math.sin(s);let kdy=L1*(Math.cos(t)-1),ady=kdy+L2*(Math.cos(s)-1);kdy+=kf*pers;ady+=af*pers;
+    const pitch=Math.max(-.45,Math.min(.3,s*.55));
+    const foot=ady+(pitch<0?-pitch*6.5:pitch*3)*side;if(foot>low)low=foot;
+    const lx=-sd*c*.1;W.leg[sd]={kx:-sn*kf+lx*kf,ax:-sn*af+lx*af,kf,af,kdy,ady,pitch,ts:1+(Math.min(1.35,1/Math.cos(t))-1)*side,ss:1+(Math.min(1.45,1/Math.cos(s))-1)*side};
+    // the arm on this side swings against its own leg
+    const fa=f+Math.PI,a=.4*Math.sin(fa)+.04,b=a+.2+.34*Math.max(0,Math.sin(fa));
+    const Lu=T*.215-hu*.55-2.2,Lf=T*.115,Lh=T*.06;
+    const ef=Lu*Math.sin(a),wf=ef+Lf*Math.sin(b),hf=wf+Lh*Math.sin(b+.12)*.6;
+    let edy=Lu*(Math.cos(a)-1),wdy=edy+Lf*(Math.cos(b)-1),hdy=wdy+Lh*(Math.cos(b+.12)-1);edy+=ef*pers*2.2;wdy+=wf*pers*2.2;hdy+=hf*pers*2.2;
+    const lat=-sd*c*.22;W.arm[sd]={ex:-sn*ef+lat*ef,wx:-sn*wf+lat*wf,hx:-sn*hf+lat*hf,edy,wdy,hdy}}
+  W.drop=-low;                                   // the lower foot is always on the floor: this is the rise and fall of a step
+  W.sway=Math.cos(p)*c*1.3;                       // weight carried over the standing leg
+  return W}
+/* A walker's cycle is painted the first time they are seen walking, a pose at a time between frames, so loading is no slower
+   and nobody who never walks costs anything. Until the set is ready they keep the old bob. Walk poses are kept at a lighter size:
+   every render worker holds its own copy of each texture. */
+const WALKQ=[],WALKREQ={};let WALKBUSY=false;
+function walkWant(id,views){if(WALKREQ[id]||!CHARDEF[id]||!CHARV[id])return;WALKREQ[id]=1;const V=[];for(const v of views||[0,1,2,3,4])for(let i=0;i<WALKN;i++)WALKQ.push([id,v,i,V]);if(!WALKBUSY){WALKBUSY=true;setTimeout(walkBuildStep,30)}}
+function walkBuildStep(){const t=WALKQ.shift();if(!t){WALKBUSY=false;return}const [id,v,i,V]=t,d=CHARDEF[id],w0=CHW,h0=CHH;let x;
+  try{CHW=Math.min(CHW,WALKW);CHH=CHW*2;x=charTex(d,VIEWS[v],{id:20+i,walk:(i+.5)/WALKN*Math.PI*2})}finally{CHW=w0;CHH=h0}
+  regTex(x);if(WK.list.length){const msg={t:'tex',id:x.id,tex:{w:x.w,h:x.h,u:x.u,e:x.e||null,n:x.n||null,m:x.m.slice(1).map(l=>({w:l.w,h:l.h,u:l.u,n:l.n||null}))}};for(const w of WK.list)w.postMessage(msg)}
+  (V[v]=V[v]||[])[i]=x;if(!WALKQ.some(q=>q[0]===id))CHARW[id]=V;
+  if(WALKQ.length)setTimeout(walkBuildStep,20);else WALKBUSY=false}
+let WALKW=64;
+{const b0=buildCharacters;buildCharacters=function(){b0();WALKN=CHW<=64?4:6;WALKQ.length=0;for(const k in WALKREQ)delete WALKREQ[k];for(const k in CHARW)delete CHARW[k]}}
+/* which pose of the cycle: the step phase the walker is in (a mirrored view is the other half of the stride) */
+function walkFrame(id,v,ph,fl){const V=CHARW[id];if(!V||!V[v])return null;const n=V[v].length;let i=Math.floor(((ph+Math.PI/2)/(Math.PI*2))*n);if(fl)i+=n>>1;return V[v][((i%n)+n)%n]}
+{const c0=charSprite;charSprite=function(id,x,y,fa,vx,vy,seed,o){const r=c0(id,x,y,fa,vx,vy,seed);
+  if(o&&o._walk&&o._wp!=null&&!CHARW[id])walkWant(id);
+  if(o&&o._walk&&o._wp!=null&&CHARW[id]){const to=Math.atan2(vy-y,vx-x),rel=angD(to,fa),v=Math.min(4,Math.round(Math.abs(rel)/(Math.PI/4))),t=walkFrame(id,v,o._wp,rel<0);if(t)r.tex=t}
+  return r}}
 
 /* ================= PEOPLE WHO LOOK ALIVE =================
    - Skin has blood in it. The crew were modelled in the grey of the station; they now have the warmth of people
